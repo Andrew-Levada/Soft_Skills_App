@@ -10,11 +10,11 @@
         <!-- New MaterialComponents attributes. -->
 <!--        <item name="colorPrimaryVariant">@color/my_app_primary_variant_color</item>-->
 <!--        <item name="colorSecondaryVariant">@color/my_app_secondary_variant_color</item>-->
-        <item name="colorSurface">#ffffff</item>
+        <item name="colorSurface">@color/colorSurface</item>
 
         <item name="colorOnPrimary">#ffffff</item>
         <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#000000</item>
-        <item name="colorOnSurface">#ffffff</item>
+        <item name="colorOnSurface">#000000</item>
     </style>
 </resources>

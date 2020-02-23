@@ -10,17 +10,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import com.andrewlevada.softskills.logic.Roadmap;
 import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.util.Objects;
 import java.util.zip.Inflater;
 
 public class RoadmapActivity extends AppCompatActivity {
+    private Roadmap roadmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roadmap);
+
+        roadmap = Roadmap.getInstance(this);
+        roadmap.startTest();
 
         BottomAppBar bar = (BottomAppBar)findViewById(R.id.bar);
         setSupportActionBar(bar);
