@@ -11,14 +11,18 @@ public abstract class Component {
 
     public abstract View getView();
     public abstract int getViewLayoutId();
-    public abstract boolean hasNextView();
+    public abstract boolean hasNextStep();
 
     @Nullable
-    public View getNextView() {
-        if (hasNextView()) {
+    public Component moveToNextStep() {
+        if (hasNextStep()) {
             step++;
-            return getView();
+            return this;
         } else return null;
+    }
+
+    public ComponentViewUnit generateComponentViewUnit() {
+        return new ComponentViewUnit(this);
     }
 
     public Component(Activity activity) {

@@ -34,7 +34,7 @@ public class ComponentText extends Component {
     }
 
     @Override
-    public boolean hasNextView() {
+    public boolean hasNextStep() {
         return false;
     }
 
