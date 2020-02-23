@@ -6,16 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".RoadmapActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="4dp"
         android:layout_height="match_parent"
-        android:id="@+id/roadmap_recycler"
-        android:padding="40dp"/>
+        android:src="@color/colorSecondary"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/coordinatorLayout"
+        app:layout_constraintStart_toStartOf="@+id/coordinatorLayout"
+        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"/>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/roadmap_recycler"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:overScrollMode="never"
+            android:scrollY="40dp"/>
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bar"
@@ -35,6 +48,8 @@
             app:elevation="0dp"
             app:layout_anchor="@id/bar"
             app:srcCompat="@drawable/ic_icon_visibility" />
+
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

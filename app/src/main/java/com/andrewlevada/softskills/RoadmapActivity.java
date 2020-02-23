@@ -25,7 +25,6 @@ public class RoadmapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_roadmap);
 
         roadmap = Roadmap.getInstance(this);
-        roadmap.startTest();
 
         BottomAppBar bar = (BottomAppBar)findViewById(R.id.bar);
         setSupportActionBar(bar);
