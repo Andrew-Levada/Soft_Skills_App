@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 public abstract class Component {
-    Activity activity;
+    private Activity activity;
     private int step;
 
     public abstract View getView();
@@ -25,7 +25,16 @@ public abstract class Component {
         return new ComponentViewUnit(this);
     }
 
-    public Component(Activity activity) {
+    public int getStep() {
+        return step;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public Component(Activity activity, int step) {
         this.activity = activity;
+        this.step = step;
     }
 }

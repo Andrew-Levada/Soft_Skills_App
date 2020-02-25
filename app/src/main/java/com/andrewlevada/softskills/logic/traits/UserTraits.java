@@ -1,40 +1,37 @@
 package com.andrewlevada.softskills.logic.traits;
 
-import java.util.List;
+import com.andrewlevada.softskills.Toolbox;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class UserTraits {
-    private List<Trait> traits;
+    private HashMap<Integer, Integer> traits;
+    private HashMap<String, Integer> traitNames;
 
     private static UserTraits instance;
 
-    private Trait findTrait(String name) {
-        for (Trait trait: traits) {
-            if (trait.getName().equals(name))
-                return trait;
-        }
-
-        return null;
-    }
-
-    public int getTrait(int index) {
-        return traits.get(index).level;
-    }
-
-    public int getTrait(String name) {
-        Trait result = findTrait(name);
-
-        if (result != null) return result.level;
+    public int getTrait(int key) {
+        Integer value = traits.get(key);
+        if (value != null) return value;
         else return -1;
     }
 
-    public void applyDeltaTrait(DeltaTrait deltaTrait) {
-        Trait obj = findTrait(deltaTrait.getName());
-        if (obj != null) obj.level += deltaTrait.delta;
+    public int getTrait(String name) {
+        if (traitNames.get(name) != null)
+            return getTrait(traitNames.get(name));
+        else return -1;
     }
 
-    public void applyDeltaTraits(List<DeltaTrait> deltaTraits) {
-        for (DeltaTrait trait: deltaTraits) {
-            applyDeltaTrait(trait);
+    public Set<Integer> getTraitsKeySet() {
+        return traits.keySet();
+    }
+
+    public void applyDeltaTraits(DeltaTraits deltaTraits) {
+        for (int key: deltaTraits.getKeySet()) {
+            if (traits.containsKey(key))
+                traits.put(key,
+                        Toolbox.clamp(traits.get(key) + deltaTraits.getValue(key), 1, 100));
         }
     }
 
@@ -46,6 +43,7 @@ public class UserTraits {
     }
 
     private UserTraits() {
-
+        traits = new HashMap<>();
+        traitNames = new HashMap<>();
     }
 }

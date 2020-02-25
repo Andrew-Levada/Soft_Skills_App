@@ -1,16 +1,22 @@
 package com.andrewlevada.softskills.logic;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.renderscript.RenderScript;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.logic.components.*;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.traits.UserTraits;
 
 import java.util.ArrayDeque;
@@ -21,11 +27,12 @@ import java.util.Queue;
 
 public class Roadmap {
     private ArrayList<ComponentViewUnit> story;
-    private ArrayList<Component> active;
+    private ArrayList<Task> active;
     private ArrayDeque<Component> queue;
 
     private UserTraits userTraits;
     private TaskManageThread taskManageThread;
+    private Handler taskManageHandler;
 
     private Activity activity;
     private RecyclerView recyclerView;
@@ -46,7 +53,9 @@ public class Roadmap {
         queue = new ArrayDeque<>();
         userTraits = UserTraits.getInstance();
 
-        taskManageThread = new TaskManageThread();
+        taskManageHandler = new TaskManageHandler();
+
+        taskManageThread = new TaskManageThread(activity, taskManageHandler);
         taskManageThread.setPriority(Thread.MIN_PRIORITY);
         taskManageThread.setName("TaskManageThread");
         taskManageThread.start();
@@ -64,33 +73,43 @@ public class Roadmap {
     }
 
     private boolean moveComponentToNextStep(int index) {
-        Component component = active.get(index);
+        Task component = active.get(index);
+
+        userTraits.applyDeltaTraits(component.getDeltaTraits());
 
         if (component.moveToNextStep() == null) {
             active.remove(index);
-
-            if (!requestQueue()) {
-                //TODO: Ask manageThread to give task
-            }
-
+            startNewComponent();
             return false;
         }
 
         story.add(component.generateComponentViewUnit());
+        recyclerView.getAdapter().notifyDataSetChanged();
 
         return true;
     }
 
+    private void startNewComponent() {
+        if (!requestQueue()) {
+            taskManageThread.requestTaskSelector();
+        } else startNewComponent();
+    }
+
     private boolean requestQueue() {
         if (queue.size() != 0) {
-            addToActive(queue.poll());
+            addToStory(queue.poll());
             return true;
         } else return false;
     }
 
-    private void addToActive(Component component) {
-        active.add(component);
+    private void addToActive(Task task) {
+        active.add(task);
+        addToStory(task);
+    }
+
+    private void addToStory(Component component) {
         story.add(component.generateComponentViewUnit());
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private void setLayoutManagerToRecyclerView() {
@@ -102,5 +121,27 @@ public class Roadmap {
     private void setAdapterToRecyclerView() {
         RecyclerView.Adapter adapter = new RoadmapListAdapter(story, activity.getApplicationContext());
         recyclerView.setAdapter(adapter);
+    }
+
+    public void testAction() {
+        startNewComponent();
+    }
+
+    private class TaskManageHandler extends Handler {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case TaskManageThread.TASKSELECTOR_CODE:
+                    if (msg.obj != null) {
+                        addToActive((Task)msg.obj);
+                    } else {
+                        //TODO: Out of acceptable tasks
+                        Log.e("DBG", "OUT OF TASKS");
+                    }
+                    break;
+            }
+        }
     }
 }

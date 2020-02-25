@@ -1,16 +1,36 @@
 package com.andrewlevada.softskills.logic;
 
-import com.andrewlevada.softskills.logic.components.Component;
+import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
+
+import androidx.annotation.Nullable;
+
+import com.andrewlevada.softskills.logic.components.tasks.ComparableTask;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
+import com.andrewlevada.softskills.logic.components.tasks.YesNoTask;
+import com.andrewlevada.softskills.logic.traits.DeltaTraits;
+import com.andrewlevada.softskills.logic.traits.UserTraits;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class TaskManageThread extends Thread {
-    public static final int TASKGEN_CODE = 1;
+    public static final int TASKSELECTOR_CODE = 1;
 
     private boolean running;
-    private int code;
-    private  GetTaskCallback callback;
+    private int taskCode;
+    private Handler handler;
+
+    private UserTraits userTraits;
+    private ArrayList<ComparableTask> taskList;
+
+    private Activity activity;
 
     @Override
-    public void run() {
+    public synchronized void run() {
         while (running) {
             try {
                 wait();
@@ -18,9 +38,12 @@ public class TaskManageThread extends Thread {
                 e.printStackTrace();
             }
 
-            switch (code) {
-                case TASKGEN_CODE:
-
+            switch (taskCode) {
+                case TASKSELECTOR_CODE:
+                    Message msg = new Message();
+                    msg.what = taskCode;
+                    msg.obj = selectTask();
+                    handler.sendMessage(msg);
                     break;
             }
         }
@@ -30,17 +53,62 @@ public class TaskManageThread extends Thread {
         running = false;
     }
 
-    public TaskManageThread() {
+    public TaskManageThread(Activity activity, Handler handler) {
+        this.activity = activity;
+        this.handler = handler;
         running = true;
+
+        userTraits = UserTraits.getInstance();
+        taskList = new ArrayList<>();
+
+        updateTaskList();
     }
 
     public interface GetTaskCallback {
-        Component executed();
+        void finished(@Nullable Task result);
     }
 
-    public void requestTaskGeneration(GetTaskCallback callback) {
-        this.callback = callback;
-        code = TASKGEN_CODE;
+    public synchronized void requestTaskSelector() {
+        taskCode = TASKSELECTOR_CODE;
         notify();
+    }
+
+    private Task selectTask() {
+        ArrayList<Double> scores = new ArrayList<>(taskList.size() + 2);
+        HashMap<Integer, Double> multipliers = new HashMap<>();
+
+        for (Integer key: userTraits.getTraitsKeySet()) {
+            double value = userTraits.getTrait(key) / 100d;
+            value = 1 - value * Math.sqrt(value);
+            multipliers.put(key, value);
+        }
+
+        for (ComparableTask task: taskList) {
+            double value = 0;
+            DeltaTraits deltaTraits = task.getWrapped().getGeneralDeltaTraits();
+
+            for (Integer key: deltaTraits.getKeySet()) {
+                if (multipliers.get(key) != null)
+                    value += deltaTraits.getValue(key) * multipliers.get(key);
+            }
+
+            scores.add(value);
+        }
+
+        Collections.sort(taskList);
+
+        for (int i = taskList.size() - 1; i >= 0; i--) {
+            if (taskList.get(i).getWrapped().isAbleToExecute()) return taskList.get(i).getWrapped().clone();
+        }
+
+        return null;
+    }
+
+    private void updateTaskList() {
+        ArrayList<DeltaTraits> a = new ArrayList<>();
+        a.add(new DeltaTraits(new HashMap<Integer, Integer>()));
+
+        Task test = new YesNoTask(activity, a, "test header", "text text text text text text text");
+        taskList.add(new ComparableTask(test));
     }
 }

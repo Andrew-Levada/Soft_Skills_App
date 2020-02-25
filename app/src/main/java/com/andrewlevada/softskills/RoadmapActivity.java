@@ -8,13 +8,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.google.android.material.bottomappbar.BottomAppBar;
-
-import java.util.Objects;
-import java.util.zip.Inflater;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class RoadmapActivity extends AppCompatActivity {
     private Roadmap roadmap;
@@ -32,6 +29,15 @@ public class RoadmapActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle the navigation click by showing a BottomDrawer etc.
+            }
+        });
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                roadmap.testAction();
             }
         });
     }

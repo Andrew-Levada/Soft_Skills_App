@@ -9,12 +9,12 @@
     <ImageView
         android:layout_width="4dp"
         android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
         android:src="@color/colorSecondary"
-        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="@+id/coordinatorLayout"
         app:layout_constraintStart_toStartOf="@+id/coordinatorLayout"
-        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout"
-        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"/>
+        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -22,18 +22,19 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/roadmap_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/roadmap_recycler"
+            android:overScrollMode="never"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
-            android:overScrollMode="never"
-            android:scrollY="40dp"/>
+            android:paddingBottom="56dp"
+            android:scrollY="40dp" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_gravity="bottom"
             app:backgroundTint="@color/colorPrimary"
             app:elevation="0dp"
@@ -48,7 +49,6 @@
             app:elevation="0dp"
             app:layout_anchor="@id/bar"
             app:srcCompat="@drawable/ic_icon_visibility" />
-
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

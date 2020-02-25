@@ -5,4 +5,7 @@
     <color name="colorBackground">#F5F5F5</color>
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorError">#FF0000</color>
+
+    <color name="colorOnSurfaceHeader">#242424</color>
+    <color name="colorOnSurfaceText">#666666</color>
 </resources>
