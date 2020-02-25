@@ -107,9 +107,10 @@ public class Roadmap {
         addToStory(task);
     }
 
-    private void addToStory(Component component) {
+    private void addToStory(@NonNull Component component) {
         story.add(component.generateComponentViewUnit());
         recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, 0);
     }
 
     private void setLayoutManagerToRecyclerView() {
