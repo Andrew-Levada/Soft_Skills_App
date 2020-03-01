@@ -124,6 +124,10 @@ public class Roadmap {
         recyclerView.setAdapter(adapter);
     }
 
+    public void fillFullView() {
+        if (active.size() != 0) active.get(0).fillFullView();
+    }
+
     public void testAction() {
         startNewComponent();
     }

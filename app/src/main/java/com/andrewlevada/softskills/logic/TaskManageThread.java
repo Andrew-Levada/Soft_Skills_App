@@ -108,7 +108,7 @@ public class TaskManageThread extends Thread {
         ArrayList<DeltaTraits> a = new ArrayList<>();
         a.add(new DeltaTraits(new HashMap<Integer, Integer>()));
 
-        Task test = new YesNoTask(activity, a, "test header", "text text text text text text text");
+        Task test = new YesNoTask(activity, a, "Тестовый заголовок", "Немного текста про лорем ипсум", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
         taskList.add(new ComparableTask(test));
     }
 }

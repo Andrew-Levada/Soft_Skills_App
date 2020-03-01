@@ -44,14 +44,19 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
 
     @Override @NonNull
     public RoadmapListAdapter.RoadmapViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
+        ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.roadmap_recycleview_container, parent, false);
 
-        if (viewType == HEADER_VIEW)
-            v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.roadmap_recycleview_header, parent, false);
-        else v = dataset.get(dataset.size() - viewType - 1).getView();
+        if (viewType == HEADER_VIEW) {
+            LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.roadmap_recycleview_header, view, true);
+        } else {
+            view.addView(dataset.get(dataset.size() - viewType - 1).getView());
+            LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.component_line_base, view, true);
+        }
 
-        return new RoadmapViewHolder((v));
+        return new RoadmapViewHolder(view);
     }
 
     @Override

@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="24dp"
-    android:layout_marginBottom="40dp"
     android:background="@drawable/component_surface">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/componentHeader"
-        android:text="Интересы"
+        android:text="Header"
         android:textSize="20sp"
         android:textColor="@color/colorOnSurfaceHeader"
         android:layout_marginBottom="24dp"/>
@@ -20,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/componentText"
-        android:text="Найдите в соц сетях группу соответствующую вашим интересам. Добавтесь туда и начните общаться в коментариях с другими людьми."
+        android:text="preview text"
         android:textColor="@color/colorOnSurfaceText"
         android:textSize="20sp"
         android:lineSpacingExtra="2dp"/>

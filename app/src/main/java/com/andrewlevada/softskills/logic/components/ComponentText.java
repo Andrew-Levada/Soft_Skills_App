@@ -15,7 +15,7 @@ public class ComponentText extends Component {
     private boolean isHeadline;
 
     @Override
-    public View getView() {
+    public View getPreview() {
         View view = LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.component_text, (ViewGroup)getActivity().findViewById(R.id.roadmap_recycler), false);
 
@@ -26,11 +26,6 @@ public class ComponentText extends Component {
         }
 
         return view;
-    }
-
-    @Override
-    public int getViewLayoutId() {
-        return R.layout.component_text;
     }
 
     @Override

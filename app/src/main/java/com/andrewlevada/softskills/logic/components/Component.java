@@ -9,8 +9,7 @@ public abstract class Component {
     private Activity activity;
     private int step;
 
-    public abstract View getView();
-    public abstract int getViewLayoutId();
+    public abstract View getPreview();
     public abstract boolean hasNextStep();
 
     @Nullable
