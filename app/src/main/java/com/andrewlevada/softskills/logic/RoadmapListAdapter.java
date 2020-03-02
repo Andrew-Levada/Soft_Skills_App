@@ -1,9 +1,13 @@
 package com.andrewlevada.softskills.logic;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,11 +39,11 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
 
     @Override
     public int getItemViewType(int position) {
-        if (position == dataset.size()) {
+        if (position == 0) {
             return HEADER_VIEW;
         }
 
-        return position;
+        return position - 1;
     }
 
     @Override @NonNull
@@ -51,16 +55,25 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
             LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.roadmap_recycleview_header, view, true);
         } else {
-            view.addView(dataset.get(dataset.size() - viewType - 1).getView());
+            view.addView(dataset.get(viewType).getView());
             LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.component_line_base, view, true);
+
+            ((TextView)view.findViewById(R.id.componentText)).setText(((TextView)view.findViewById(R.id.componentText)).getText() + " " + viewType);
         }
+        view.setAlpha(0f);
+        ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(view, "Alpha", 1f);
+        fabTranslation.setDuration(700);
+        fabTranslation.setInterpolator(new DecelerateInterpolator());
+        fabTranslation.start();
 
         return new RoadmapViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RoadmapViewHolder holder, int position) { }
+    public void onBindViewHolder(@NonNull RoadmapViewHolder holder, int position) {
+
+    }
 
     @Override
     public int getItemCount() {

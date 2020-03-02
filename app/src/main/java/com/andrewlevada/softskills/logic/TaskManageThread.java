@@ -6,6 +6,7 @@ import android.os.Message;
 
 import androidx.annotation.Nullable;
 
+import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.tasks.ComparableTask;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.components.tasks.YesNoTask;
@@ -27,7 +28,7 @@ public class TaskManageThread extends Thread {
     private UserTraits userTraits;
     private ArrayList<ComparableTask> taskList;
 
-    private Activity activity;
+    private RoadmapActivity activity;
 
     @Override
     public synchronized void run() {
@@ -53,7 +54,7 @@ public class TaskManageThread extends Thread {
         running = false;
     }
 
-    public TaskManageThread(Activity activity, Handler handler) {
+    public TaskManageThread(RoadmapActivity activity, Handler handler) {
         this.activity = activity;
         this.handler = handler;
         running = true;

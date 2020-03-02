@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.SoftSkills" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.SoftSkills" parent="Theme.MaterialComponents.DayNight">
         <!-- Original AppCompat attributes. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
@@ -16,5 +16,20 @@
         <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnSurface">#000000</item>
+
+        <item name="materialButtonStyle">@style/Theme.SoftSkills.Button.FixedContained</item>
+        <item name="materialButtonOutlinedStyle">@style/Theme.SoftSkills.Button.FixedOutlined</item>
+    </style>
+
+    <style name="Theme.SoftSkills.Button.FixedOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:layout_height">@dimen/mtrl_btn_height</item>
+    </style>
+
+    <style name="Theme.SoftSkills.Button.FixedContained" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:layout_height">@dimen/mtrl_btn_height</item>
     </style>
 </resources>

@@ -1,5 +1,7 @@
 package com.andrewlevada.softskills.logic;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
@@ -7,14 +9,19 @@ import android.renderscript.RenderScript;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.andrewlevada.softskills.R;
+import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.*;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.traits.UserTraits;
@@ -34,19 +41,19 @@ public class Roadmap {
     private TaskManageThread taskManageThread;
     private Handler taskManageHandler;
 
-    private Activity activity;
+    private RoadmapActivity activity;
     private RecyclerView recyclerView;
 
     private static Roadmap instance;
 
-    public static Roadmap getInstance(Activity activity) {
+    public static Roadmap getInstance(RoadmapActivity activity) {
         if (instance == null)
             instance = new Roadmap(activity);
 
         return instance;
     }
 
-    private Roadmap(Activity activity) {
+    private Roadmap(RoadmapActivity activity) {
         this.activity = activity;
         story = new ArrayList<>();
         active = new ArrayList<>();
@@ -61,29 +68,28 @@ public class Roadmap {
         taskManageThread.start();
 
         recyclerView = (RecyclerView)activity.findViewById(R.id.roadmap_recycler);
-        setLayoutManagerToRecyclerView();
-        setAdapterToRecyclerView();
+        setupRecyclerView();
     }
 
-    private boolean moveComponentToNextStep(Component component) {
-        int index = active.indexOf(component);
+    public boolean moveTaskToNextStep(Task task) {
+        int index = active.indexOf(task);
 
         if (index == -1) return false;
-        return this.moveComponentToNextStep(index);
+        return this.moveTaskToNextStep(index);
     }
 
-    private boolean moveComponentToNextStep(int index) {
-        Task component = active.get(index);
+    public boolean moveTaskToNextStep(int index) {
+        Task task = active.get(index);
 
-        userTraits.applyDeltaTraits(component.getDeltaTraits());
+        userTraits.applyDeltaTraits(task.getDeltaTraits());
 
-        if (component.moveToNextStep() == null) {
+        if (task.moveToNextStep() == null) {
             active.remove(index);
             startNewComponent();
             return false;
         }
 
-        story.add(component.generateComponentViewUnit());
+        story.add(task.generateComponentViewUnit());
         recyclerView.getAdapter().notifyDataSetChanged();
 
         return true;
@@ -110,25 +116,38 @@ public class Roadmap {
     private void addToStory(@NonNull Component component) {
         story.add(component.generateComponentViewUnit());
         recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, 0);
+        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, story.size());
     }
 
-    private void setLayoutManagerToRecyclerView() {
+    private void setupRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
-        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-    private void setAdapterToRecyclerView() {
         RecyclerView.Adapter adapter = new RoadmapListAdapter(story, activity.getApplicationContext());
         recyclerView.setAdapter(adapter);
     }
 
     public void fillFullView() {
-        if (active.size() != 0) active.get(0).fillFullView();
+        if (active.size() != 0) {
+            ViewGroup parent = (ViewGroup)activity.findViewById(R.id.full_layout);
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                int id = parent.getChildAt(i).getId();
+
+                if (id == R.id.fullHeader) continue;
+                if (id == R.id.fullText) continue;
+
+                parent.removeViewAt(i);
+            }
+            active.get(0).fillFullView(activity.findViewById(R.id.full_layout));
+        }
     }
 
+    static int counter = 0;
+
     public void testAction() {
+        queue.add(new ComponentText(activity, "?" + counter, true));
+        counter++;
         startNewComponent();
     }
 

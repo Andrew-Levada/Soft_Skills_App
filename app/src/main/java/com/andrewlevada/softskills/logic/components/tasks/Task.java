@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.andrewlevada.softskills.R;
+import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.Component;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 
@@ -19,19 +21,35 @@ public abstract class Task extends Component {
     private ArrayList<DeltaTraits> deltaTraitsList;
     private DeltaTraits generalDeltaTraits;
 
+    private int step;
+
     String headerText;
     String previewText;
     String fullText;
 
     public abstract boolean isAbleToExecute();
+    public abstract boolean hasNextStep();
+    @NonNull
     public abstract Task clone();
+
+    @Nullable
+    public Component moveToNextStep() {
+        if (hasNextStep()) {
+            step++;
+            return this;
+        } else return null;
+    }
 
     public DeltaTraits getGeneralDeltaTraits() {
         return generalDeltaTraits;
     }
 
     public DeltaTraits getDeltaTraits() {
-        return deltaTraitsList.get(getStep());
+        return deltaTraitsList.get(step);
+    }
+
+    public int getStep() {
+        return step;
     }
 
     protected ArrayList<DeltaTraits> getDeltaTraitsListCopy() {
@@ -63,13 +81,13 @@ public abstract class Task extends Component {
         return view;
     }
 
-    public void fillFullView() {
-        ((TextView)getActivity().findViewById(R.id.fullHeader)).setText(headerText);
-        ((TextView)getActivity().findViewById(R.id.fullText)).setText(fullText);
+    public void fillFullView(View parent) {
+        ((TextView)parent.findViewById(R.id.fullHeader)).setText(headerText);
+        ((TextView)parent.findViewById(R.id.fullText)).setText(fullText);
     }
 
-    public Task(Activity activity, ArrayList<DeltaTraits> deltaTraitsList, String headerText, String previewText, String fullText) {
-        super(activity, deltaTraitsList.size() + 1);
+    public Task(RoadmapActivity activity, ArrayList<DeltaTraits> deltaTraitsList, String headerText, String previewText, String fullText) {
+        super(activity);
         this.deltaTraitsList = deltaTraitsList;
         this.headerText = headerText;
         this.previewText = previewText;

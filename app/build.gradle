@@ -23,7 +23,7 @@ android {
             res.srcDirs =
             [
                     '/src/main/res',
-                    '/src/main/components',
+                    '/src/main/components'
             ]
         }
     }

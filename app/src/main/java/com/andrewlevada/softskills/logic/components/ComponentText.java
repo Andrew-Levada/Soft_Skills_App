@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.andrewlevada.softskills.R;
+import com.andrewlevada.softskills.RoadmapActivity;
 
 public class ComponentText extends Component {
     private String text;
@@ -28,13 +29,8 @@ public class ComponentText extends Component {
         return view;
     }
 
-    @Override
-    public boolean hasNextStep() {
-        return false;
-    }
-
-    public ComponentText(Activity activity, String text, boolean isHeadline) {
-        super(activity, 1);
+    public ComponentText(RoadmapActivity activity, String text, boolean isHeadline) {
+        super(activity);
         this.text = text;
         this.isHeadline = isHeadline;
     }
