@@ -71,20 +71,29 @@ public class Roadmap {
         setupRecyclerView();
     }
 
-    public boolean moveTaskToNextStep(Task task) {
+    public boolean moveTaskToNextStep(Task task, int status) {
         int index = active.indexOf(task);
 
         if (index == -1) return false;
-        return this.moveTaskToNextStep(index);
+        return this.moveTaskToNextStep(index, status);
     }
 
-    public boolean moveTaskToNextStep(int index) {
+    public boolean moveTaskToNextStep(Task task) {
+        return moveTaskToNextStep(task, MoveToNextStepStatuses.STATUS_NORMAL);
+    }
+
+    private boolean moveTaskToNextStep(int index, int status) {
         Task task = active.get(index);
 
         userTraits.applyDeltaTraits(task.getDeltaTraits());
 
         if (task.moveToNextStep() == null) {
             active.remove(index);
+
+            if (status == MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS)
+                addToStory(new ComponentFinished(activity, true));
+            else addToStory(new ComponentFinished(activity, false));
+
             startNewComponent();
             return false;
         }
@@ -96,9 +105,9 @@ public class Roadmap {
     }
 
     private void startNewComponent() {
-        if (!requestQueue()) {
-            taskManageThread.requestTaskSelector();
-        } else startNewComponent();
+        if (requestQueue()) return;
+
+        taskManageThread.requestTaskSelector();
     }
 
     private boolean requestQueue() {
@@ -146,9 +155,12 @@ public class Roadmap {
     static int counter = 0;
 
     public void testAction() {
-        queue.add(new ComponentText(activity, "?" + counter, true));
-        counter++;
+        if (active.size() > 0) return;
+
+        //queue.add(new ComponentText(activity, "Заголовок номер " + counter, true));
+
         startNewComponent();
+        counter++;
     }
 
     private class TaskManageHandler extends Handler {

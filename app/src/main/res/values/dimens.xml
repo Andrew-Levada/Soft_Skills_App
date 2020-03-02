@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="mtrl_btn_height">36dp</dimen>
+
+    <dimen name="tiny_components_size">40dp</dimen>
 </resources>

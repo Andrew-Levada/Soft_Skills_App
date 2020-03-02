@@ -33,7 +33,7 @@ public abstract class Task extends Component {
     public abstract Task clone();
 
     @Nullable
-    public Component moveToNextStep() {
+    public Task moveToNextStep() {
         if (hasNextStep()) {
             step++;
             return this;

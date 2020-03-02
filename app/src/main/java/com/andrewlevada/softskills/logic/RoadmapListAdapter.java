@@ -58,9 +58,8 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
             view.addView(dataset.get(viewType).getView());
             LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.component_line_base, view, true);
-
-            ((TextView)view.findViewById(R.id.componentText)).setText(((TextView)view.findViewById(R.id.componentText)).getText() + " " + viewType);
         }
+
         view.setAlpha(0f);
         ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(view, "Alpha", 1f);
         fabTranslation.setDuration(700);
