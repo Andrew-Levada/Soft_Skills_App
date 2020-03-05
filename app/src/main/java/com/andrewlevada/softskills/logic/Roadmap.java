@@ -98,7 +98,9 @@ public class Roadmap {
             return false;
         }
 
-        story.add(task.generateComponentViewUnit());
+        if (task.makesNewPreview()) story.add(task.generateComponentViewUnit());
+        else task.effectExistingCVU();
+
         recyclerView.getAdapter().notifyDataSetChanged();
 
         return true;

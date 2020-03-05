@@ -22,15 +22,18 @@ public abstract class Task extends Component {
     private DeltaTraits generalDeltaTraits;
 
     private int step;
+    private int stepsCount;
 
-    String headerText;
-    String previewText;
-    String fullText;
+    ArrayList<TaskPreviewHolder> previewHolders;
+    ArrayList<String> fullTexts;
 
-    public abstract boolean isAbleToExecute();
-    public abstract boolean hasNextStep();
     @NonNull
     public abstract Task clone();
+    public abstract boolean isAbleToExecute();
+
+    public boolean hasNextStep() {
+        return step < stepsCount - 1;
+    }
 
     @Nullable
     public Task moveToNextStep() {
@@ -46,10 +49,6 @@ public abstract class Task extends Component {
 
     public DeltaTraits getDeltaTraits() {
         return deltaTraitsList.get(step);
-    }
-
-    public int getStep() {
-        return step;
     }
 
     protected ArrayList<DeltaTraits> getDeltaTraitsListCopy() {
@@ -75,23 +74,35 @@ public abstract class Task extends Component {
         View view = LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.task_preview_base, (ViewGroup)getActivity().findViewById(R.id.roadmap_recycler), false);
 
-        ((TextView)view.findViewById(R.id.componentHeader)).setText(headerText);
-        ((TextView)view.findViewById(R.id.componentText)).setText(previewText);
+        ((TextView)view.findViewById(R.id.componentHeader)).setText(previewHolders.get(step).getHeaderText());
+        ((TextView)view.findViewById(R.id.componentText)).setText(previewHolders.get(step).getPreviewText());
 
         return view;
     }
 
-    public void fillFullView(View parent) {
-        ((TextView)parent.findViewById(R.id.fullHeader)).setText(headerText);
-        ((TextView)parent.findViewById(R.id.fullText)).setText(fullText);
+    public boolean makesNewPreview() {
+        return previewHolders.get(step).isNew();
     }
 
-    public Task(RoadmapActivity activity, ArrayList<DeltaTraits> deltaTraitsList, String headerText, String previewText, String fullText) {
+    public void effectExistingCVU() {
+        if (previewHolders.get(step).isNew()) return;
+
+        getViewUnit(previewHolders.get(step).getChangeIndex()).requestUpdate();
+    }
+
+    public void fillFullView(View parent) {
+        ((TextView)parent.findViewById(R.id.fullHeader)).setText(previewHolders.get(step).getHeaderText());
+        ((TextView)parent.findViewById(R.id.fullText)).setText(fullTexts.get(step));
+    }
+
+    public Task(RoadmapActivity activity, int stepsCount, ArrayList<DeltaTraits> deltaTraitsList,
+                ArrayList<TaskPreviewHolder> previewHolders, ArrayList<String> fullTexts) {
         super(activity);
+        this.stepsCount = stepsCount;
         this.deltaTraitsList = deltaTraitsList;
-        this.headerText = headerText;
-        this.previewText = previewText;
-        this.fullText = fullText;
+        this.previewHolders = previewHolders;
+        this.fullTexts = fullTexts;
+
         countGeneralDeltaTraits();
     }
 }

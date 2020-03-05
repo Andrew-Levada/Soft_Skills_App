@@ -25,11 +25,6 @@ public class YesNoTask extends Task {
     }
 
     @Override
-    public boolean hasNextStep() {
-        return false;
-    }
-
-    @Override
     public void fillFullView(View parent) {
         super.fillFullView(parent);
 
@@ -64,10 +59,25 @@ public class YesNoTask extends Task {
 
     @Override @NonNull
     public Task clone() {
-        return new YesNoTask(getActivity(), getDeltaTraitsListCopy(), headerText, previewText, fullText);
+        return new YesNoTask(getActivity(), getDeltaTraitsListCopy(), previewHolders, fullTexts);
     }
 
-    public YesNoTask(RoadmapActivity activity, ArrayList<DeltaTraits> deltaTraitsList, String headerText, String previewText, String fullText) {
-        super(activity, deltaTraitsList, headerText, previewText, fullText);
+    private YesNoTask(RoadmapActivity activity, ArrayList<DeltaTraits> deltaTraitsList,
+                      ArrayList<TaskPreviewHolder> previewHolders, ArrayList<String> fullTexts) {
+        super(activity, 1, deltaTraitsList, previewHolders, fullTexts);
+    }
+
+    public static YesNoTask getInstance(RoadmapActivity activity, DeltaTraits deltaTraits,
+                                        String headerText, String previewText, String fullText) {
+        ArrayList<DeltaTraits> deltaTraitsList = new ArrayList<>(2);
+        deltaTraitsList.add(deltaTraits);
+
+        ArrayList<TaskPreviewHolder> previewHolders = new ArrayList<>(2);
+        previewHolders.add(new TaskPreviewHolder(headerText, previewText, true, 0));
+
+        ArrayList<String> fullTexts = new ArrayList<>();
+        fullTexts.add(fullText);
+
+        return new YesNoTask(activity, deltaTraitsList, previewHolders, fullTexts);
     }
 }

@@ -92,8 +92,8 @@ public class TaskManageThread extends Thread {
                 if (multipliers.get(key) != null)
                     value += deltaTraits.getValue(key) * multipliers.get(key);
             }
-
-            scores.add(value);
+            
+            task.setScore(value);
         }
 
         Collections.sort(taskList);
@@ -106,10 +106,9 @@ public class TaskManageThread extends Thread {
     }
 
     private void updateTaskList() {
-        ArrayList<DeltaTraits> a = new ArrayList<>();
-        a.add(new DeltaTraits(new HashMap<Integer, Integer>()));
+        DeltaTraits deltaTraits = new DeltaTraits(new HashMap<Integer, Integer>());
 
-        Task test = new YesNoTask(activity, a, "Тестовый заголовок", "Немного текста про лорем ипсум", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+        Task test = YesNoTask.getInstance(activity, deltaTraits, "Тестовый заголовок", "Немного текста про лорем ипсум", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
         taskList.add(new ComparableTask(test));
     }
 }
