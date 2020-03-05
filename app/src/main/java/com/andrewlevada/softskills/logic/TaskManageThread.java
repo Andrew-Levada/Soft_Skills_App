@@ -1,13 +1,16 @@
 package com.andrewlevada.softskills.logic;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
 
+import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.tasks.ComparableTask;
+import com.andrewlevada.softskills.logic.components.tasks.EditTextTask;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.components.tasks.YesNoTask;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
@@ -20,6 +23,8 @@ import java.util.HashMap;
 
 public class TaskManageThread extends Thread {
     public static final int TASKSELECTOR_CODE = 1;
+
+    private static final int spread = 2;
 
     private boolean running;
     private int taskCode;
@@ -92,6 +97,8 @@ public class TaskManageThread extends Thread {
                 if (multipliers.get(key) != null)
                     value += deltaTraits.getValue(key) * multipliers.get(key);
             }
+
+            value += Math.random() * spread;
             
             task.setScore(value);
         }
@@ -106,9 +113,19 @@ public class TaskManageThread extends Thread {
     }
 
     private void updateTaskList() {
+        Resources res = activity.getResources();
+
         DeltaTraits deltaTraits = new DeltaTraits(new HashMap<Integer, Integer>());
 
-        Task test = YesNoTask.getInstance(activity, deltaTraits, "Тестовый заголовок", "Немного текста про лорем ипсум", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
-        taskList.add(new ComparableTask(test));
+        Task yesNoTask = YesNoTask.getInstance(activity, deltaTraits, res.getString(R.string.yntask_header),
+                res.getString(R.string.yntask_header),  res.getString(R.string.yntask_header));
+
+        Task edittextTask = EditTextTask.getInstance(activity, deltaTraits,
+                res.getString(R.string.ettask_header), res.getString(R.string.ettask_short_task),
+                res.getString(R.string.ettask_full_task), res.getString(R.string.ettask_short_review),
+                res.getString(R.string.ettask_full_review));
+
+        taskList.add(new ComparableTask(yesNoTask));
+        taskList.add(new ComparableTask(edittextTask));
     }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 public class ComponentViewUnit {
     private Component component;
     private View view;
+    private int storyIndex;
 
     public View getView() {
         return view;
@@ -18,8 +19,17 @@ public class ComponentViewUnit {
         view = component.getPreview();
     }
 
+    public int getStoryIndex() {
+        return storyIndex;
+    }
+
+    public void setStoryIndex(int storyIndex) {
+        if (storyIndex >= 0) this.storyIndex = storyIndex;
+    }
+
     public ComponentViewUnit(Component component) {
         this.component = component;
-        view = component.getPreview();
+
+        requestUpdate();
     }
 }

@@ -85,7 +85,8 @@ public class Roadmap {
     private boolean moveTaskToNextStep(int index, int status) {
         Task task = active.get(index);
 
-        userTraits.applyDeltaTraits(task.getDeltaTraits());
+        if (task.getDeltaTraits() != null)
+            userTraits.applyDeltaTraits(task.getDeltaTraits());
 
         if (task.moveToNextStep() == null) {
             active.remove(index);
@@ -98,10 +99,13 @@ public class Roadmap {
             return false;
         }
 
-        if (task.makesNewPreview()) story.add(task.generateComponentViewUnit());
-        else task.effectExistingCVU();
+        task.performStepAction();
 
-        recyclerView.getAdapter().notifyDataSetChanged();
+        if (task.makesNewPreview()) addToStory(task);
+        else {
+            int i = task.effectExistingCVU();
+            if (i != -1) recyclerView.getAdapter().notifyDataSetChanged();
+        }
 
         return true;
     }
@@ -125,8 +129,11 @@ public class Roadmap {
     }
 
     private void addToStory(@NonNull Component component) {
-        story.add(component.generateComponentViewUnit());
-        recyclerView.getAdapter().notifyDataSetChanged();
+        ComponentViewUnit viewUnit = component.generateComponentViewUnit();
+        viewUnit.setStoryIndex(story.size());
+        story.add(viewUnit);
+
+        recyclerView.getAdapter().notifyItemInserted(story.size());
         recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, story.size());
     }
 
@@ -157,7 +164,7 @@ public class Roadmap {
     static int counter = 0;
 
     public void testAction() {
-        if (active.size() > 0) return;
+        //if (active.size() > 0) return;
 
         //queue.add(new ComponentText(activity, "Заголовок номер " + counter, true));
 

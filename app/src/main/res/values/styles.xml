@@ -1,24 +1,24 @@
 <resources>
-    <style name="Theme.SoftSkills" parent="Theme.MaterialComponents.DayNight">
-        <!-- Original AppCompat attributes. -->
+    <style name="Theme.SoftSkills" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
 
         <item name="windowNoTitle">true</item>
 
-        <!-- New MaterialComponents attributes. -->
 <!--        <item name="colorPrimaryVariant">@color/my_app_primary_variant_color</item>-->
 <!--        <item name="colorSecondaryVariant">@color/my_app_secondary_variant_color</item>-->
         <item name="colorSurface">@color/colorSurface</item>
 
-        <item name="colorOnPrimary">#ffffff</item>
-        <item name="colorOnSecondary">#ffffff</item>
-        <item name="colorOnBackground">#000000</item>
-        <item name="colorOnSurface">#000000</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnSurfaceText</item>
+        <item name="colorOnSurface">@color/colorOnSurfaceText</item>
 
         <item name="materialButtonStyle">@style/Theme.SoftSkills.Button.FixedContained</item>
         <item name="materialButtonOutlinedStyle">@style/Theme.SoftSkills.Button.FixedOutlined</item>
+
+        <item name="textInputStyle">@style/Theme.SoftSkills.TextFields.FullOutline</item>
     </style>
 
     <style name="Theme.SoftSkills.Button.FixedOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -31,5 +31,18 @@
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:layout_height">@dimen/mtrl_btn_height</item>
+    </style>
+    
+    <style name="Theme.SoftSkills.TextFields.FullOutline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorOnPrimary</item>
+        <item name="counterTextColor">@color/colorOnPrimary</item>
+        <item name="counterOverflowTextColor">@color/colorError</item>
+        <item name="errorTextColor">@color/colorError</item>
+        <item name="helperTextTextColor">@color/colorOnPrimary</item>
+        <item name="hintTextColor">@color/colorOnPrimary</item>
+        <item name="placeholderTextColor">@color/colorOnPrimary</item>
+        <item name="prefixTextColor">@color/colorOnPrimary</item>
+        <item name="suffixTextColor">@color/colorOnPrimary</item>
+        <item name="android:textColorHint">@color/colorOnPrimary</item>
     </style>
 </resources>

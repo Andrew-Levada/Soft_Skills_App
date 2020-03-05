@@ -17,6 +17,7 @@ import android.animation.TimeInterpolator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.google.android.material.appbar.AppBarLayout;
@@ -148,5 +150,14 @@ public class RoadmapActivity extends AppCompatActivity {
 
             fullViewerOpen.start();
         }
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        View view = getCurrentFocus();
+        if (view == null) view = new View(this);
+
+        if (imm != null) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

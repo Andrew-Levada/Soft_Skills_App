@@ -25,8 +25,13 @@ public class YesNoTask extends Task {
     }
 
     @Override
+    public View getPreview() {
+        return getPreviewBase();
+    }
+
+    @Override
     public void fillFullView(View parent) {
-        super.fillFullView(parent);
+        fillFullViewBase(parent);
 
         View buttons = LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.task_full_yesno, (ViewGroup) parent, true);
@@ -55,6 +60,11 @@ public class YesNoTask extends Task {
                 getActivity().closeFull();
             }
         });
+    }
+
+    @Override
+    public void performStepAction() {
+
     }
 
     @Override @NonNull

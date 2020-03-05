@@ -24,11 +24,8 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
     private Context context;
 
     static class RoadmapViewHolder extends RecyclerView.ViewHolder {
-        public View view;
-
         public RoadmapViewHolder(View v) {
             super(v);
-            view = v;
         }
     }
 
@@ -51,27 +48,27 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
         ViewGroup view = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.roadmap_recycleview_container, parent, false);
 
-        if (viewType == HEADER_VIEW) {
-            LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.roadmap_recycleview_header, view, true);
-        } else {
-            view.addView(dataset.get(viewType).getView());
-            LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.component_line_base, view, true);
-        }
-
-        view.setAlpha(0f);
-        ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(view, "Alpha", 1f);
-        fabTranslation.setDuration(700);
-        fabTranslation.setInterpolator(new DecelerateInterpolator());
-        fabTranslation.start();
-
         return new RoadmapViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RoadmapViewHolder holder, int position) {
+        ViewGroup item = (ViewGroup) holder.itemView;
 
+        if (position == 0) {
+            LayoutInflater.from(context) .inflate(R.layout.roadmap_recycleview_header, item, true);
+        } else {
+            View view = dataset.get(position - 1).getView();
+            item.removeAllViews();
+            item.addView(view);
+            LayoutInflater.from(context) .inflate(R.layout.component_line_base, item, true);
+        }
+
+        item.setAlpha(0f);
+        ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(item, "Alpha", 1f);
+        fabTranslation.setDuration(1000);
+        fabTranslation.setInterpolator(new DecelerateInterpolator());
+        fabTranslation.start();
     }
 
     @Override

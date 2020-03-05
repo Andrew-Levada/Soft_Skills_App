@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="24dp"
+    android:paddingTop="24dp"
     android:background="@drawable/component_surface">
 
     <TextView
@@ -13,6 +13,8 @@
         android:text="Header"
         android:textSize="20sp"
         android:textColor="@color/colorOnSurfaceHeader"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"/>
 
     <TextView
@@ -22,6 +24,9 @@
         android:text="preview text"
         android:textColor="@color/colorOnSurfaceText"
         android:textSize="20sp"
-        android:lineSpacingExtra="2dp"/>
+        android:lineSpacingExtra="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"/>
 
 </LinearLayout>
