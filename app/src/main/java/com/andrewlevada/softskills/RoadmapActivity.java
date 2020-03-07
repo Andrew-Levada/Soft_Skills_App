@@ -1,5 +1,6 @@
 package com.andrewlevada.softskills;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -54,6 +55,7 @@ public class RoadmapActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
 
     private boolean isFullOpened = false;
+    private OnBackPressedCallback fullBackCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,16 @@ public class RoadmapActivity extends AppCompatActivity {
         constraintSet.applyTo(constraintLayout);
 
         playFullOpenAnimation(false);
+
+        fullBackCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                closeFull(null);
+                remove();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, fullBackCallback);
     }
 
     public void closeFull(final CloseFullHandler handler) {
@@ -142,6 +154,9 @@ public class RoadmapActivity extends AppCompatActivity {
 
         TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.roadmap_layout), transition);
         constraintSet.applyTo(constraintLayout);
+
+        fullBackCallback.remove();
+        fullBackCallback = null;
     }
 
     private void cleanFull() {
