@@ -1,5 +1,6 @@
 package com.andrewlevada.softskills.logic;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -65,10 +66,21 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
         }
 
         item.setAlpha(0f);
-        ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(item, "Alpha", 1f);
-        fabTranslation.setDuration(1000);
-        fabTranslation.setInterpolator(new DecelerateInterpolator());
-        fabTranslation.start();
+        item.setTranslationY(20);
+
+        ObjectAnimator alphaAnimation = ObjectAnimator.ofFloat(item, "Alpha", 1f);
+        alphaAnimation.setDuration(1000);
+        alphaAnimation.setInterpolator(new DecelerateInterpolator());
+
+        ObjectAnimator yAnimation = ObjectAnimator.ofFloat(item, "TranslationY", 0f);
+        yAnimation.setDuration(1000);
+        yAnimation.setInterpolator(new DecelerateInterpolator());
+
+        final AnimatorSet animation = new AnimatorSet();
+        animation.play(alphaAnimation)
+                 .with(yAnimation);
+
+        animation.start();
     }
 
     @Override

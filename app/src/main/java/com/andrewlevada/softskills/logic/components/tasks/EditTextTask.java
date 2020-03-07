@@ -89,9 +89,7 @@ public class EditTextTask extends Task {
 
                         if (!value.equals("")) {
                             text = value;
-                            Roadmap.getInstance(getActivity()).moveTaskToNextStep(itself, MoveToNextStepStatuses.STATUS_BACKGROUND);
-                            getActivity().hideKeyboard();
-                            getActivity().closeFull();
+                            Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_BACKGROUND);
                         }
                     }
                 });
@@ -117,8 +115,7 @@ public class EditTextTask extends Task {
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Roadmap.getInstance(getActivity()).moveTaskToNextStep(itself);
-                                getActivity().closeFull();
+                                Toolbox.closeFullAndMoveStep(getActivity(), itself);
                             }
                         });
                 break;
@@ -138,10 +135,11 @@ public class EditTextTask extends Task {
 
     @Override
     public void performStepAction() {
+        final Task itself = this;
+
         switch (getStep()) {
             case 1:
                 //TODO: Send data to server and continusly check for task to be reviewed
-                final Task itself = this;
 
                 class DebugThread extends Thread {
                     @Override
@@ -163,8 +161,7 @@ public class EditTextTask extends Task {
                 break;
 
             case 3:
-                Roadmap.getInstance(getActivity()).moveTaskToNextStep(this, MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS);
-                getActivity().closeFull();
+                Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS);
                 break;
         }
     }

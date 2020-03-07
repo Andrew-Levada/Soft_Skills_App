@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.SimpleInflater;
+import com.andrewlevada.softskills.Toolbox;
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
@@ -43,16 +44,14 @@ public class YesNoTask extends Task {
         buttons.findViewById(R.id.done_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Roadmap.getInstance(getActivity()).moveTaskToNextStep(itself, MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS);
-                getActivity().closeFull();
+                Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS);
             }
         });
 
         buttons.findViewById(R.id.failed_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Roadmap.getInstance(getActivity()).moveTaskToNextStep(itself, MoveToNextStepStatuses.STATUS_FINISHED_FAIL);
-                getActivity().closeFull();
+                Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_FINISHED_FAIL);
             }
         });
     }

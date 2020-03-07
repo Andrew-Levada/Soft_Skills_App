@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 import androidx.transition.TransitionValues;
@@ -71,7 +73,7 @@ public class RoadmapActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isFullOpened) {
-                    closeFull();
+                    closeFull(null);
                 } else roadmap.testAction();
             }
         });
@@ -103,7 +105,6 @@ public class RoadmapActivity extends AppCompatActivity {
 
     public void openFull() {
         if (isFullOpened) return;
-
         if (!roadmap.fillFullView()) return;
 
         isFullOpened = true;
@@ -117,18 +118,42 @@ public class RoadmapActivity extends AppCompatActivity {
         playFullOpenAnimation(false);
     }
 
-    public void closeFull() {
+    public void closeFull(final CloseFullHandler handler) {
         if (!isFullOpened) return;
 
         isFullOpened = false;
         bar.setNavigationIcon(R.drawable.ic_icon_tips);
+        cleanFull();
 
         playFullOpenAnimation(true);
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.load(getApplicationContext(), R.layout.activity_roadmap);
-        TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.roadmap_layout));
+
+        Transition transition = new AutoTransition() {
+            @Override
+            protected void end() {
+                if (handler != null) handler.next();
+            }
+        };
+
+        transition.setDuration(500);
+        transition.setInterpolator(new DecelerateInterpolator());
+
+        TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.roadmap_layout), transition);
         constraintSet.applyTo(constraintLayout);
+    }
+
+    private void cleanFull() {
+        ViewGroup parent = (ViewGroup) findViewById(R.id.full_layout);
+        for (int i = parent.getChildCount() - 1; i >= 0; i--) {
+            int id = parent.getChildAt(i).getId();
+
+            if (id == R.id.fullHeader) continue;
+            if (id == R.id.fullText) continue;
+
+            parent.removeViewAt(i);
+        }
     }
 
     private void playFullOpenAnimation(boolean isReverse) {
@@ -161,5 +186,9 @@ public class RoadmapActivity extends AppCompatActivity {
         if (view == null) view = new View(this);
 
         if (imm != null) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static interface CloseFullHandler {
+        void next();
     }
 }

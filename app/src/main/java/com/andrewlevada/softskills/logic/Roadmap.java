@@ -79,7 +79,6 @@ public class Roadmap {
         setupRecyclerView();
     }
 
-    @UiThread
     public boolean moveTaskToNextStep(Task task, int status) {
         int index = active.indexOf(task);
 
@@ -87,7 +86,6 @@ public class Roadmap {
         return this.moveTaskToNextStep(index, status);
     }
 
-    @UiThread
     public boolean moveTaskToNextStep(Task task) {
         return moveTaskToNextStep(task, MoveToNextStepStatuses.STATUS_NORMAL);
     }
@@ -95,7 +93,10 @@ public class Roadmap {
     private boolean moveTaskToNextStep(int index, int status) {
         Task task = active.get(index);
 
-        if (task != ongoingTask) taskQueue.add(task);
+        if (task != ongoingTask) {
+            taskQueue.add(task);
+            return true;
+        }
 
         if (task.getDeltaTraits() != null)
             userTraits.applyDeltaTraits(task.getDeltaTraits());
@@ -169,18 +170,7 @@ public class Roadmap {
 
     public boolean fillFullView() {
         if (active.size() != 0 && ongoingTask != null) {
-            ViewGroup parent = (ViewGroup) activity.findViewById(R.id.full_layout);
-            for (int i = parent.getChildCount() - 1; i >= 0; i--) {
-                int id = parent.getChildAt(i).getId();
-
-                if (id == R.id.fullHeader) continue;
-                if (id == R.id.fullText) continue;
-
-                parent.removeViewAt(i);
-            }
-
             ongoingTask.fillFullView(activity.findViewById(R.id.full_layout));
-
             return true;
         } else return false;
     }
@@ -198,7 +188,6 @@ public class Roadmap {
         taskManageThread.requestTaskSelector();
     }
 
-    @AnyThread
     public void addTaskToQueue(Task task) {
         if (task == null) return;
         if (ongoingTask == null) {

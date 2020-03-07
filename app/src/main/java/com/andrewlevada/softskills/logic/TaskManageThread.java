@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Random;
 
 public class TaskManageThread extends Thread {
     public static final int TASKSELECTOR_CODE = 1;
@@ -34,6 +35,7 @@ public class TaskManageThread extends Thread {
     private ArrayList<ComparableTask> taskList;
 
     private RoadmapActivity activity;
+    private Random rnd;
 
     @Override
     public synchronized void run() {
@@ -63,6 +65,7 @@ public class TaskManageThread extends Thread {
         this.activity = activity;
         this.handler = handler;
         running = true;
+        rnd = new Random("hi".hashCode());
 
         userTraits = UserTraits.getInstance();
         taskList = new ArrayList<>();
@@ -98,7 +101,7 @@ public class TaskManageThread extends Thread {
                     value += deltaTraits.getValue(key) * multipliers.get(key);
             }
 
-            value += Math.random() * spread;
+            value += rnd.nextDouble() * spread;
             
             task.setScore(value);
         }

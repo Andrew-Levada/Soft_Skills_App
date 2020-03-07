@@ -5,6 +5,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.andrewlevada.softskills.logic.Roadmap;
+import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
+
 public class Toolbox {
     public static int clamp(int value, int min, int max) {
         if (value >= max) return max;
@@ -26,5 +30,20 @@ public class Toolbox {
     public static View getLastChild(View parent) {
         if (!(parent instanceof ViewGroup)) return null;
         return getLastChild((ViewGroup) parent);
+    }
+
+    public static void closeFullAndMoveStep(final RoadmapActivity activity, final Task task, final int status) {
+        activity.hideKeyboard();
+
+        activity.closeFull(new RoadmapActivity.CloseFullHandler() {
+            @Override
+            public void next() {
+                Roadmap.getInstance(activity).moveTaskToNextStep(task, status);
+            }
+        });
+    }
+
+    public static void closeFullAndMoveStep(final RoadmapActivity activity, final Task task) {
+        closeFullAndMoveStep(activity, task, MoveToNextStepStatuses.STATUS_NORMAL);
     }
 }
