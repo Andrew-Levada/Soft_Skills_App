@@ -17,8 +17,6 @@
 
         <item name="materialButtonStyle">@style/Theme.SoftSkills.Button.FixedContained</item>
         <item name="materialButtonOutlinedStyle">@style/Theme.SoftSkills.Button.FixedOutlined</item>
-
-        <item name="textInputStyle">@style/Theme.SoftSkills.TextFields.FullOutline</item>
     </style>
 
     <style name="Theme.SoftSkills.Button.FixedOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -31,6 +29,16 @@
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:layout_height">@dimen/mtrl_btn_height</item>
+    </style>
+
+    <style name="Theme.SoftSkills.Button.FullOutlined" parent="Theme.SoftSkills.Button.FixedOutlined">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="strokeColor">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="Theme.SoftSkills.Button.FullContained" parent="Theme.SoftSkills.Button.FixedContained">
+        <item name="backgroundTint">@color/colorOnPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
     
     <style name="Theme.SoftSkills.TextFields.FullOutline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">

@@ -38,13 +38,6 @@ public class YesNoTask extends Task {
 
         final Task itself = this;
 
-        buttons.findViewById(R.id.tips_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         buttons.findViewById(R.id.done_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

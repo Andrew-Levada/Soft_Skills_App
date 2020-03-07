@@ -38,6 +38,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 
 import com.andrewlevada.softskills.logic.Roadmap;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -103,9 +104,10 @@ public class RoadmapActivity extends AppCompatActivity {
     public void openFull() {
         if (isFullOpened) return;
 
+        if (!roadmap.fillFullView()) return;
+
         isFullOpened = true;
         bar.setNavigationIcon(R.drawable.ic_icon_close);
-        roadmap.fillFullView();
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.load(getApplicationContext(), R.layout.activity_roadmap_full);

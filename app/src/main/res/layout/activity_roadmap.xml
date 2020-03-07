@@ -59,37 +59,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/full_layout"
+    <ScrollView
+        android:id="@+id/full_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="40dp"
-        android:paddingTop="20dp"
-        android:paddingRight="40dp"
-        android:paddingBottom="40dp"
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/coordinator">
 
-        <TextView
-            android:id="@+id/fullHeader"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/full_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Header"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingTop="20dp"
+            android:paddingRight="40dp"
+            android:paddingBottom="40dp">
 
-        <TextView
-            android:id="@+id/fullText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:lineSpacingExtra="2dp"
-            android:text="full text"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/fullHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="Header"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="18sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/fullText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:lineSpacingExtra="2dp"
+                android:text="full text"
+                android:textColor="@color/colorOnPrimary"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

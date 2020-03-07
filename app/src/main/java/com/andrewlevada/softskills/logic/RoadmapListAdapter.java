@@ -54,12 +54,12 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
     @Override
     public void onBindViewHolder(@NonNull RoadmapViewHolder holder, int position) {
         ViewGroup item = (ViewGroup) holder.itemView;
+        item.removeAllViews();
 
         if (position == 0) {
             LayoutInflater.from(context) .inflate(R.layout.roadmap_recycleview_header, item, true);
         } else {
             View view = dataset.get(position - 1).getView();
-            item.removeAllViews();
             item.addView(view);
             LayoutInflater.from(context) .inflate(R.layout.component_line_base, item, true);
         }

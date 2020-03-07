@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
@@ -36,6 +39,7 @@ public class Roadmap {
     private ArrayList<ComponentViewUnit> story;
     private ArrayList<Task> active;
     private ArrayDeque<Component> queue;
+    private ArrayDeque<Task> taskQueue;
 
     private UserTraits userTraits;
     private TaskManageThread taskManageThread;
@@ -43,6 +47,9 @@ public class Roadmap {
 
     private RoadmapActivity activity;
     private RecyclerView recyclerView;
+
+    @Nullable
+    private Task ongoingTask;
 
     private static Roadmap instance;
 
@@ -58,6 +65,7 @@ public class Roadmap {
         story = new ArrayList<>();
         active = new ArrayList<>();
         queue = new ArrayDeque<>();
+        taskQueue = new ArrayDeque<>();
         userTraits = UserTraits.getInstance();
 
         taskManageHandler = new TaskManageHandler();
@@ -71,6 +79,7 @@ public class Roadmap {
         setupRecyclerView();
     }
 
+    @UiThread
     public boolean moveTaskToNextStep(Task task, int status) {
         int index = active.indexOf(task);
 
@@ -78,12 +87,15 @@ public class Roadmap {
         return this.moveTaskToNextStep(index, status);
     }
 
+    @UiThread
     public boolean moveTaskToNextStep(Task task) {
         return moveTaskToNextStep(task, MoveToNextStepStatuses.STATUS_NORMAL);
     }
 
     private boolean moveTaskToNextStep(int index, int status) {
         Task task = active.get(index);
+
+        if (task != ongoingTask) taskQueue.add(task);
 
         if (task.getDeltaTraits() != null)
             userTraits.applyDeltaTraits(task.getDeltaTraits());
@@ -95,11 +107,17 @@ public class Roadmap {
                 addToStory(new ComponentFinished(activity, true));
             else addToStory(new ComponentFinished(activity, false));
 
-            startNewComponent();
+            ongoingTask = null;
+            requestNewTask();
             return false;
         }
 
         task.performStepAction();
+
+        if (status == MoveToNextStepStatuses.STATUS_BACKGROUND) {
+            ongoingTask = null;
+            requestNewTask();
+        }
 
         if (task.makesNewPreview()) addToStory(task);
         else {
@@ -110,15 +128,18 @@ public class Roadmap {
         return true;
     }
 
-    private void startNewComponent() {
-        if (requestQueue()) return;
-
-        taskManageThread.requestTaskSelector();
-    }
-
     private boolean requestQueue() {
         if (queue.size() != 0) {
             addToStory(queue.poll());
+            return true;
+        } else return false;
+    }
+
+    private boolean requestTaskQueue() {
+        if (taskQueue.size() != 0) {
+            Task task = taskQueue.poll();
+            ongoingTask = task;
+            moveTaskToNextStep(task);
             return true;
         } else return false;
     }
@@ -146,10 +167,10 @@ public class Roadmap {
         recyclerView.setAdapter(adapter);
     }
 
-    public void fillFullView() {
-        if (active.size() != 0) {
-            ViewGroup parent = (ViewGroup)activity.findViewById(R.id.full_layout);
-            for (int i = 0; i < parent.getChildCount(); i++) {
+    public boolean fillFullView() {
+        if (active.size() != 0 && ongoingTask != null) {
+            ViewGroup parent = (ViewGroup) activity.findViewById(R.id.full_layout);
+            for (int i = parent.getChildCount() - 1; i >= 0; i--) {
                 int id = parent.getChildAt(i).getId();
 
                 if (id == R.id.fullHeader) continue;
@@ -157,19 +178,39 @@ public class Roadmap {
 
                 parent.removeViewAt(i);
             }
-            active.get(0).fillFullView(activity.findViewById(R.id.full_layout));
-        }
+
+            ongoingTask.fillFullView(activity.findViewById(R.id.full_layout));
+
+            return true;
+        } else return false;
     }
 
-    static int counter = 0;
+    private void requestNewTask() {
+        if (active.size() >= 3) return;
+        if (ongoingTask != null) return;
+        if (requestQueue()) {
+            requestNewTask();
+            return;
+        }
+        if (requestTaskQueue()) return;
+
+        //Job schedule this
+        taskManageThread.requestTaskSelector();
+    }
+
+    @AnyThread
+    public void addTaskToQueue(Task task) {
+        if (task == null) return;
+        if (ongoingTask == null) {
+            moveTaskToNextStep(task);
+            return;
+        }
+
+        taskQueue.add(task);
+    }
 
     public void testAction() {
-        //if (active.size() > 0) return;
-
-        //queue.add(new ComponentText(activity, "Заголовок номер " + counter, true));
-
-        startNewComponent();
-        counter++;
+        requestNewTask();
     }
 
     private class TaskManageHandler extends Handler {
@@ -180,7 +221,9 @@ public class Roadmap {
             switch (msg.what) {
                 case TaskManageThread.TASKSELECTOR_CODE:
                     if (msg.obj != null) {
-                        addToActive((Task)msg.obj);
+                        Task task = (Task) msg.obj;
+                        ongoingTask = task;
+                        addToActive(task);
                     } else {
                         //TODO: Out of acceptable tasks
                         Log.e("DBG", "OUT OF TASKS");
