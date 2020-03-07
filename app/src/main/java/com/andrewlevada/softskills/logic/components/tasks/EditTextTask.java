@@ -1,8 +1,6 @@
 package com.andrewlevada.softskills.logic.components.tasks;
 
-import android.text.Layout;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +13,10 @@ import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.Toolbox;
 import com.andrewlevada.softskills.logic.Roadmap;
+import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,17 +42,17 @@ public class EditTextTask extends Task {
     public View getPreview() {
         View view = getPreviewBase();
 
+        SimpleInflater inflater = new SimpleInflater(getActivity(), view);
+
         switch (getStep()) {
             case 1:
 
             case 3:
-                Button button = LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_preview_button, (ViewGroup) view, true)
-                        .findViewById(R.id.open_button);
+                Button button = inflater.inflate(R.layout.task_preview_button)
+                                        .findViewById(R.id.open_button);
 
                 button.setText("Посмотреть");
 
-                final Task itself = this;
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -74,16 +71,14 @@ public class EditTextTask extends Task {
         fillFullViewBase(parent);
 
         final EditTextTask itself = this;
+        SimpleInflater inflater = new SimpleInflater(getActivity(), parent);
 
         switch (getStep()) {
             case 0:
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_edittext, (ViewGroup) parent, true);
+                final TextInputEditText editTextInput = inflater.inflate(R.layout.task_full_edittext)
+                                                        .findViewById(R.id.edit_text);
 
-                final TextInputEditText editTextInput = (TextInputEditText) parent.findViewById(R.id.edit_text);
-
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_button_contained, (ViewGroup) parent, true)
+                inflater.inflate(R.layout.task_full_button_contained)
                         .findViewById(R.id.button)
                         .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -103,30 +98,21 @@ public class EditTextTask extends Task {
                 break;
 
             case 1:
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_outlined_text, (ViewGroup) parent, true);
-
-                ((TextView) parent.findViewById(R.id.text)).setText(text);
+                ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
+                            .findViewById(R.id.text)).setText(text);
                 break;
 
             case 2:
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_outlined_text, (ViewGroup) parent, true);
+                ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
+                            .findViewById(R.id.text)).setText(review);
 
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText(review);
+                ((TextView) inflater.inflate(R.layout.task_full_textview)
+                            .findViewById(R.id.text)).setText("Ваш текст:");
 
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_textview, (ViewGroup) parent, true);
+                ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
+                            .findViewById(R.id.text)).setText(text);
 
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText("Ваш текст:");
-
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_outlined_text, (ViewGroup) parent, true);
-
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText(text);
-
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_button_contained, (ViewGroup) parent, true)
+                inflater.inflate(R.layout.task_full_button_contained)
                         .findViewById(R.id.button)
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -138,20 +124,14 @@ public class EditTextTask extends Task {
                 break;
 
             case 3:
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_outlined_text, (ViewGroup) parent, true);
+                ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
+                        .findViewById(R.id.text)).setText(review);
 
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText(review);
+                ((TextView) inflater.inflate(R.layout.task_full_textview)
+                        .findViewById(R.id.text)).setText("Ваш текст:");
 
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_textview, (ViewGroup) parent, true);
-
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText("Ваш текст:");
-
-                LayoutInflater.from(getActivity().getApplicationContext())
-                        .inflate(R.layout.task_full_outlined_text, (ViewGroup) parent, true);
-
-                ((TextView) Toolbox.getLastChild(parent).findViewById(R.id.text)).setText(text);
+                ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
+                        .findViewById(R.id.text)).setText(text);
                 break;
         }
     }

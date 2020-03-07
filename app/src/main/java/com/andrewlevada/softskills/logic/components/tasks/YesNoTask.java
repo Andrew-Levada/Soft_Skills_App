@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
+import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
@@ -33,8 +34,9 @@ public class YesNoTask extends Task {
     public void fillFullView(View parent) {
         fillFullViewBase(parent);
 
-        View buttons = LayoutInflater.from(getActivity().getApplicationContext())
-                .inflate(R.layout.task_full_yesno, (ViewGroup) parent, true);
+        SimpleInflater inflater = new SimpleInflater(getActivity(), parent);
+
+        View buttons = inflater.inflate(R.layout.task_full_yesno);
 
         final Task itself = this;
 
