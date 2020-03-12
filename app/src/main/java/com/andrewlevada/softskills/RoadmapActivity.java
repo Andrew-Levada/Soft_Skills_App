@@ -5,44 +5,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
-import androidx.transition.TransitionValues;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.TypeEvaluator;
-import android.animation.ValueAnimator;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-import android.view.DisplayCutout;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnticipateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 
 import com.andrewlevada.softskills.logic.Roadmap;
-import com.andrewlevada.softskills.logic.components.tasks.Task;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -131,11 +112,13 @@ public class RoadmapActivity extends AppCompatActivity {
     }
 
     public void closeFull(final CloseFullHandler handler) {
-        if (!isFullOpened) return;
+        if (!isFullOpened) {
+            if (handler != null) handler.next();
+            return;
+        }
 
         isFullOpened = false;
         bar.setNavigationIcon(R.drawable.ic_icon_tips);
-        cleanFull();
 
         playFullOpenAnimation(true);
 
@@ -145,6 +128,7 @@ public class RoadmapActivity extends AppCompatActivity {
         Transition transition = new AutoTransition() {
             @Override
             protected void end() {
+                cleanFull();
                 if (handler != null) handler.next();
             }
         };

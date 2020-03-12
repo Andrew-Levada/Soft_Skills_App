@@ -18,7 +18,13 @@ public abstract class Component {
     public abstract View getPreview();
 
     public ComponentViewUnit generateComponentViewUnit() {
-        ComponentViewUnit viewUnit = new ComponentViewUnit(this);
+        ComponentViewUnit viewUnit = new ComponentViewUnit(this, false);
+        viewUnits.add(viewUnit);
+        return viewUnit;
+    }
+
+    protected ComponentViewUnit generateComponentViewUnit(boolean updatable) {
+        ComponentViewUnit viewUnit = new ComponentViewUnit(this, updatable);
         viewUnits.add(viewUnit);
         return viewUnit;
     }

@@ -5,6 +5,7 @@ public class TaskPreviewHolder {
     private String previewText;
     private boolean isNew;
     private int changeIndex;
+    private boolean isUpdatable;
 
     public String getHeaderText() {
         return headerText;
@@ -22,10 +23,15 @@ public class TaskPreviewHolder {
         return changeIndex;
     }
 
-    public TaskPreviewHolder(String headerText, String previewText, boolean isNew, int changeIndex) {
+    public boolean isUpdatable() {
+        return isUpdatable;
+    }
+
+    public TaskPreviewHolder(String headerText, String previewText, boolean isNew, int changeIndex, boolean isUpdatable) {
         this.headerText = headerText;
         this.previewText = previewText;
         this.isNew = isNew;
         this.changeIndex = changeIndex;
+        this.isUpdatable = isUpdatable;
     }
 }

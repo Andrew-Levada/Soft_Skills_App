@@ -1,27 +1,13 @@
 package com.andrewlevada.softskills.logic;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.RenderScript;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
-import androidx.annotation.AnyThread;
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
@@ -31,9 +17,6 @@ import com.andrewlevada.softskills.logic.traits.UserTraits;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
 
 public class Roadmap {
     private ArrayList<ComponentViewUnit> story;
@@ -47,6 +30,7 @@ public class Roadmap {
 
     private RoadmapActivity activity;
     private RecyclerView recyclerView;
+    private RoadmapListAdapter recyclerAdapter;
 
     @Nullable
     private Task ongoingTask;
@@ -113,18 +97,15 @@ public class Roadmap {
             return false;
         }
 
-        task.performStepAction();
-
         if (status == MoveToNextStepStatuses.STATUS_BACKGROUND) {
             ongoingTask = null;
             requestNewTask();
         }
 
         if (task.makesNewPreview()) addToStory(task);
-        else {
-            int i = task.effectExistingCVU();
-            if (i != -1) recyclerView.getAdapter().notifyDataSetChanged();
-        }
+        else task.effectExistingCVU();
+
+        task.performStepAction();
 
         return true;
     }
@@ -155,8 +136,7 @@ public class Roadmap {
         viewUnit.setStoryIndex(story.size());
         story.add(viewUnit);
 
-        recyclerView.getAdapter().notifyItemInserted(story.size());
-        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, story.size());
+        recyclerAdapter.addElement(viewUnit);
     }
 
     private void setupRecyclerView() {
@@ -164,7 +144,8 @@ public class Roadmap {
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new RoadmapListAdapter(story, activity.getApplicationContext());
+        RoadmapListAdapter adapter = new RoadmapListAdapter(recyclerView);
+        recyclerAdapter = adapter;
         recyclerView.setAdapter(adapter);
     }
 

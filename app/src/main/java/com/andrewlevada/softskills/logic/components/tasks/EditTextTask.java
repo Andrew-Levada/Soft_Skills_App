@@ -182,10 +182,10 @@ public class EditTextTask extends Task {
         deltaTraitsList.add(null);
 
         ArrayList<TaskPreviewHolder> previewHolders = new ArrayList<>(5);
-        previewHolders.add(new TaskPreviewHolder(header, shortTask, true, 0));
-        previewHolders.add(new TaskPreviewHolder(header, shortTask, false, 0));
-        previewHolders.add(new TaskPreviewHolder(header, shortReview, true, 0));
-        previewHolders.add(new TaskPreviewHolder(header, shortReview, false, 1));
+        previewHolders.add(new TaskPreviewHolder(header, shortTask, true, 0, true));
+        previewHolders.add(new TaskPreviewHolder(header, shortTask, false, 0, false));
+        previewHolders.add(new TaskPreviewHolder(header, shortReview, true, 0, true));
+        previewHolders.add(new TaskPreviewHolder(header, shortReview, false, 1, false));
 
         ArrayList<String> fullTexts = new ArrayList<>(5);
         fullTexts.add(fullTask);

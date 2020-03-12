@@ -77,7 +77,7 @@ public class YesNoTask extends Task {
         deltaTraitsList.add(deltaTraits);
 
         ArrayList<TaskPreviewHolder> previewHolders = new ArrayList<>(2);
-        previewHolders.add(new TaskPreviewHolder(headerText, previewText, true, 0));
+        previewHolders.add(new TaskPreviewHolder(headerText, previewText, true, 0, false));
 
         ArrayList<String> fullTexts = new ArrayList<>();
         fullTexts.add(fullText);

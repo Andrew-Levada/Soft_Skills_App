@@ -14,6 +14,7 @@ import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.logic.components.Component;
+import com.andrewlevada.softskills.logic.components.ComponentViewUnit;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 
 import java.util.ArrayList;
@@ -46,6 +47,11 @@ public abstract class Task extends Component {
             step++;
             return this;
         } else return null;
+    }
+
+    @Override
+    public ComponentViewUnit generateComponentViewUnit() {
+        return generateComponentViewUnit(previewHolders.get(step).isUpdatable());
     }
 
     public DeltaTraits getGeneralDeltaTraits() {
