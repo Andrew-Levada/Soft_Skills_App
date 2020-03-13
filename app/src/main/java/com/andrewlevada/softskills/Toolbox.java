@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
-import com.andrewlevada.softskills.logic.components.tasks.Task;
+import com.andrewlevada.softskills.logic.components.tasks.AbstractTask;
 
 public class Toolbox {
     public static int clamp(int value, int min, int max) {
@@ -32,7 +32,7 @@ public class Toolbox {
         return getLastChild((ViewGroup) parent);
     }
 
-    public static void closeFullAndMoveStep(final RoadmapActivity activity, final Task task, final int status) {
+    public static void closeFullAndMoveStep(final RoadmapActivity activity, final AbstractTask task, final int status) {
         activity.hideKeyboard();
 
         activity.closeFull(new RoadmapActivity.CloseFullHandler() {
@@ -43,7 +43,7 @@ public class Toolbox {
         });
     }
 
-    public static void closeFullAndMoveStep(final RoadmapActivity activity, final Task task) {
+    public static void closeFullAndMoveStep(final RoadmapActivity activity, final AbstractTask task) {
         closeFullAndMoveStep(activity, task, MoveToNextStepStatuses.STATUS_NORMAL);
     }
 }

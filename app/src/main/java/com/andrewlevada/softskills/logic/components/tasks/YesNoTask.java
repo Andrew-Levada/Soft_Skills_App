@@ -1,12 +1,6 @@
 package com.andrewlevada.softskills.logic.components.tasks;
 
-import android.app.Activity;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -14,13 +8,12 @@ import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.Toolbox;
-import com.andrewlevada.softskills.logic.Roadmap;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 
 import java.util.ArrayList;
 
-public class YesNoTask extends Task {
+public class YesNoTask extends AbstractTask {
     @Override
     public boolean isAbleToExecute() {
         return true;
@@ -39,7 +32,7 @@ public class YesNoTask extends Task {
 
         View buttons = inflater.inflate(R.layout.task_full_yesno);
 
-        final Task itself = this;
+        final AbstractTask itself = this;
 
         buttons.findViewById(R.id.done_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +55,7 @@ public class YesNoTask extends Task {
     }
 
     @Override @NonNull
-    public Task clone() {
+    public Task copy() {
         return new YesNoTask(getActivity(), getDeltaTraitsListCopy(), previewHolders, fullTexts);
     }
 

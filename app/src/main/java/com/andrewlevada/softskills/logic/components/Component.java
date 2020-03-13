@@ -1,44 +1,15 @@
 package com.andrewlevada.softskills.logic.components;
 
-import android.app.Activity;
 import android.view.View;
-
-import androidx.annotation.Nullable;
 
 import com.andrewlevada.softskills.RoadmapActivity;
 
-import java.util.ArrayList;
+public interface Component {
+    Component copy();
 
-public abstract class Component {
-    private RoadmapActivity activity;
+    View getPreview();
 
-    private ArrayList<ComponentViewUnit> viewUnits;
+    RoadmapActivity getActivity();
 
-    @Nullable
-    public abstract View getPreview();
-
-    public ComponentViewUnit generateComponentViewUnit() {
-        ComponentViewUnit viewUnit = new ComponentViewUnit(this, false);
-        viewUnits.add(viewUnit);
-        return viewUnit;
-    }
-
-    protected ComponentViewUnit generateComponentViewUnit(boolean updatable) {
-        ComponentViewUnit viewUnit = new ComponentViewUnit(this, updatable);
-        viewUnits.add(viewUnit);
-        return viewUnit;
-    }
-
-    public RoadmapActivity getActivity() {
-        return activity;
-    }
-
-    public ComponentViewUnit getViewUnit(int index) {
-        return viewUnits.get(index);
-    }
-
-    public Component(RoadmapActivity activity) {
-        this.activity = activity;
-        viewUnits = new ArrayList<>();
-    }
+    ComponentViewUnit generateComponentViewUnit();
 }

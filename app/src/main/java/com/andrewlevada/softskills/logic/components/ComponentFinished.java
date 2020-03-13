@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 
-public class ComponentFinished extends Component {
+public class ComponentFinished extends AbstractComponent {
     private boolean isSuccess;
 
     public ComponentFinished(RoadmapActivity activity, boolean isSuccess) {
@@ -24,5 +24,10 @@ public class ComponentFinished extends Component {
         if (!isSuccess) ((ImageView)view.findViewById(R.id.component_finished_icon)).setImageResource(R.drawable.ic_icon_thumb_down);
 
         return view;
+    }
+
+    @Override
+    public Component copy() {
+        return new ComponentFinished(getActivity(), isSuccess);
     }
 }

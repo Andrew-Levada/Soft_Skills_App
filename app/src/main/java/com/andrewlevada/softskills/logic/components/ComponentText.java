@@ -1,8 +1,6 @@
 package com.andrewlevada.softskills.logic.components;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,7 @@ import android.widget.TextView;
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 
-public class ComponentText extends Component {
+public class ComponentText extends AbstractComponent {
     private String text;
     private boolean isHeadline;
 
@@ -33,5 +31,10 @@ public class ComponentText extends Component {
         super(activity);
         this.text = text;
         this.isHeadline = isHeadline;
+    }
+
+    @Override
+    public Component copy() {
+        return new ComponentText(getActivity(), text, isHeadline);
     }
 }

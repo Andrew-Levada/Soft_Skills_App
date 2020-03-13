@@ -13,6 +13,7 @@ import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.*;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.traits.UserTraits;
 
 import java.util.ArrayDeque;
@@ -85,7 +86,7 @@ public class Roadmap {
         if (task.getDeltaTraits() != null)
             userTraits.applyDeltaTraits(task.getDeltaTraits());
 
-        if (task.moveToNextStep() == null) {
+        if (!task.moveToNextStep()) {
             active.remove(index);
 
             if (status == MoveToNextStepStatuses.STATUS_FINISHED_SUCCESS)
@@ -102,7 +103,7 @@ public class Roadmap {
             requestNewTask();
         }
 
-        if (task.makesNewPreview()) addToStory(task);
+        if (task.isMakingNewPreview()) addToStory(task);
         else task.effectExistingCVU();
 
         task.performStepAction();

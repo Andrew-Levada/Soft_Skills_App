@@ -1,9 +1,7 @@
 package com.andrewlevada.softskills.logic.components.tasks;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,12 +19,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class EditTextTask extends Task {
+public class EditTextTask extends AbstractTask {
     private String text;
     private String review;
 
     @Override @NonNull
-    public Task clone() {
+    public AbstractTask copy() {
         return new EditTextTask(getActivity(), getDeltaTraitsListCopy(), previewHolders, fullTexts);
     }
 
@@ -135,7 +133,7 @@ public class EditTextTask extends Task {
 
     @Override
     public void performStepAction() {
-        final Task itself = this;
+        final AbstractTask itself = this;
 
         switch (getStep()) {
             case 1:
