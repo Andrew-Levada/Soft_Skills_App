@@ -5,17 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.logic.components.ComponentViewUnit;
@@ -24,7 +21,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.RoadmapViewHolder> {
-    private final float SCROLL_SPEED_MS_PER_INCH = 300f;
+    private final float SCROLL_SPEED_MS_PER_INCH = 200f;
 
     private ArrayList<ComponentViewUnit> dataset;
     private ArrayDeque<ComponentViewUnit> queue;
@@ -61,7 +58,8 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
         return position;
     }
 
-    @Override @NonNull
+    @Override
+    @NonNull
     public RoadmapListAdapter.RoadmapViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup item = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.roadmap_recycleview_container, parent, false);
@@ -138,7 +136,8 @@ public class RoadmapListAdapter extends RecyclerView.Adapter<RoadmapListAdapter.
             };
 
             linearSmoothScroller.setTargetPosition(dataset.size());
-            recyclerView.getLayoutManager().startSmoothScroll(linearSmoothScroller);
+            if (recyclerView.getLayoutManager() != null)
+                recyclerView.getLayoutManager().startSmoothScroll(linearSmoothScroller);
         }
 
         @Override

@@ -1,18 +1,11 @@
 package com.andrewlevada.softskills.logic;
 
-import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
-
-import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
 import com.andrewlevada.softskills.logic.components.tasks.ComparableTask;
-import com.andrewlevada.softskills.logic.components.tasks.EditTextTask;
-import com.andrewlevada.softskills.logic.components.tasks.AbstractTask;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
-import com.andrewlevada.softskills.logic.components.tasks.YesNoTask;
 import com.andrewlevada.softskills.logic.server.ServerInterface;
 import com.andrewlevada.softskills.logic.server.ServerProxy;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
@@ -39,6 +32,16 @@ public class TaskManageThread extends Thread {
 
     private RoadmapActivity activity;
     private Random rnd;
+
+    public TaskManageThread(RoadmapActivity activity, Handler handler) {
+        this.activity = activity;
+        this.handler = handler;
+        running = true;
+        rnd = new Random("hi".hashCode());
+
+        userTraits = UserTraits.getInstance();
+        taskList = new ArrayList<>();
+    }
 
     @Override
     public synchronized void run() {
@@ -69,49 +72,38 @@ public class TaskManageThread extends Thread {
         running = false;
     }
 
-    public TaskManageThread(RoadmapActivity activity, Handler handler) {
-        this.activity = activity;
-        this.handler = handler;
-        running = true;
-        rnd = new Random("hi".hashCode());
-
-        userTraits = UserTraits.getInstance();
-        taskList = new ArrayList<>();
-    }
-
     public synchronized void requestTaskSelector() {
         taskCode = TASKSELECTOR_CODE;
         notify();
     }
-
     private Task selectTask() {
-        ArrayList<Double> scores = new ArrayList<>(taskList.size() + 2);
         HashMap<Integer, Double> multipliers = new HashMap<>();
 
-        for (Integer key: userTraits.getTraitsKeySet()) {
+        for (Integer key : userTraits.getTraitsKeySet()) {
             double value = userTraits.getTrait(key) / 100d;
             value = 1 - value * Math.sqrt(value);
             multipliers.put(key, value);
         }
 
-        for (ComparableTask task: taskList) {
+        for (ComparableTask task : taskList) {
             double value = 0;
             DeltaTraits deltaTraits = task.getWrapped().getGeneralDeltaTraits();
 
-            for (Integer key: deltaTraits.getKeySet()) {
+            for (Integer key : deltaTraits.getKeySet()) {
                 if (multipliers.get(key) != null)
                     value += deltaTraits.getValue(key) * multipliers.get(key);
             }
 
             value += rnd.nextDouble() * spread;
-            
+
             task.setScore(value);
         }
 
         Collections.sort(taskList);
 
         for (int i = taskList.size() - 1; i >= 0; i--) {
-            if (taskList.get(i).getWrapped().isAbleToExecute()) return taskList.get(i).getWrapped().copy();
+            if (taskList.get(i).getWrapped().isAbleToExecute())
+                return taskList.get(i).getWrapped().copy();
         }
 
         return null;
@@ -120,7 +112,7 @@ public class TaskManageThread extends Thread {
     private void syncData() {
         taskList = server.getFullTaskList();
 
-        for (ComparableTask task: taskList) {
+        for (ComparableTask task : taskList) {
             task.getWrapped().setActivity(activity);
         }
 

@@ -1,14 +1,5 @@
 package com.andrewlevada.softskills;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.transition.AutoTransition;
-import androidx.transition.Transition;
-import androidx.transition.TransitionManager;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -22,6 +13,15 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.transition.AutoTransition;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import com.andrewlevada.softskills.logic.Roadmap;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -47,7 +47,7 @@ public class RoadmapActivity extends AppCompatActivity {
         display = new Point();
         getWindowManager().getDefaultDisplay().getSize(display);
 
-        bar = (BottomAppBar)findViewById(R.id.bar);
+        bar = (BottomAppBar) findViewById(R.id.bar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         constraintLayout = findViewById(R.id.roadmap_layout);
 
@@ -157,7 +157,7 @@ public class RoadmapActivity extends AppCompatActivity {
 
     private void playFullOpenAnimation(boolean isReverse) {
         if (!isReverse) {
-            ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(fab, "TranslationY", -56f -10f);
+            ObjectAnimator fabTranslation = ObjectAnimator.ofFloat(fab, "TranslationY", -56f - 10f);
             fabTranslation.setDuration(250);
             fabTranslation.setStartDelay(200);
             fabTranslation.setInterpolator(new AccelerateInterpolator());
@@ -187,7 +187,7 @@ public class RoadmapActivity extends AppCompatActivity {
         if (imm != null) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static interface CloseFullHandler {
+    public interface CloseFullHandler {
         void next();
     }
 }

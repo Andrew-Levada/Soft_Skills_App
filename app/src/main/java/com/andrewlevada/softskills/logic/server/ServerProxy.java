@@ -4,7 +4,10 @@ import android.content.res.Resources;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
-import com.andrewlevada.softskills.logic.components.tasks.*;
+import com.andrewlevada.softskills.logic.components.tasks.ComparableTask;
+import com.andrewlevada.softskills.logic.components.tasks.EditTextTask;
+import com.andrewlevada.softskills.logic.components.tasks.Task;
+import com.andrewlevada.softskills.logic.components.tasks.YesNoTask;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 import com.andrewlevada.softskills.logic.traits.UserTraits;
 
@@ -22,7 +25,7 @@ public class ServerProxy implements ServerInterface {
         DeltaTraits deltaTraits = new DeltaTraits(new HashMap<Integer, Integer>());
 
         Task yesNoTask = YesNoTask.getInstance(null, deltaTraits, res.getString(R.string.yntask_header),
-                res.getString(R.string.yntask_short),  res.getString(R.string.yntask_full));
+                res.getString(R.string.yntask_short), res.getString(R.string.yntask_full));
 
         Task edittextTask = EditTextTask.getInstance(null, deltaTraits,
                 res.getString(R.string.ettask_header), res.getString(R.string.ettask_short_task),
@@ -32,6 +35,7 @@ public class ServerProxy implements ServerInterface {
         taskList.add(new ComparableTask(yesNoTask));
         taskList.add(new ComparableTask(edittextTask));
     }
+
 
     @Override
     public ArrayList<ComparableTask> getFullTaskList() {

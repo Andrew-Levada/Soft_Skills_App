@@ -18,7 +18,7 @@ public class Toolbox {
 
     @Nullable
     public static View getLastChild(ViewGroup parent) {
-        for (int i = parent.getChildCount() - 1;  i >= 0; i--) {
+        for (int i = parent.getChildCount() - 1; i >= 0; i--) {
             View child = parent.getChildAt(i);
 
             if (child != null) return child;

@@ -3,7 +3,6 @@ package com.andrewlevada.softskills.logic.components.tasks;
 import android.view.View;
 
 import com.andrewlevada.softskills.logic.components.Component;
-import com.andrewlevada.softskills.logic.components.ComponentViewUnit;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 
 public interface Task extends Component {

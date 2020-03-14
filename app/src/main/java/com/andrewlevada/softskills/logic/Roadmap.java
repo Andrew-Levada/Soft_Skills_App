@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
-import com.andrewlevada.softskills.logic.components.*;
-import com.andrewlevada.softskills.logic.components.tasks.Task;
+import com.andrewlevada.softskills.logic.components.Component;
+import com.andrewlevada.softskills.logic.components.ComponentFinished;
+import com.andrewlevada.softskills.logic.components.ComponentViewUnit;
+import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.components.tasks.Task;
 import com.andrewlevada.softskills.logic.traits.UserTraits;
 
@@ -38,6 +40,7 @@ public class Roadmap {
 
     private static Roadmap instance;
 
+
     public static Roadmap getInstance(RoadmapActivity activity) {
         if (instance == null)
             instance = new Roadmap(activity);
@@ -60,9 +63,10 @@ public class Roadmap {
         taskManageThread.setName("TaskManageThread");
         taskManageThread.start();
 
-        recyclerView = (RecyclerView)activity.findViewById(R.id.roadmap_recycler);
+        recyclerView = (RecyclerView) activity.findViewById(R.id.roadmap_recycler);
         setupRecyclerView();
     }
+
 
     public boolean moveTaskToNextStep(Task task, int status) {
         int index = active.indexOf(task);
@@ -111,6 +115,7 @@ public class Roadmap {
         return true;
     }
 
+
     private boolean requestQueue() {
         if (queue.size() != 0) {
             addToStory(queue.poll());
@@ -127,34 +132,14 @@ public class Roadmap {
         } else return false;
     }
 
-    private void addToActive(Task task) {
-        active.add(task);
-        addToStory(task);
-    }
+    public void addTaskToQueue(Task task) {
+        if (task == null) return;
+        if (ongoingTask == null) {
+            moveTaskToNextStep(task);
+            return;
+        }
 
-    private void addToStory(@NonNull Component component) {
-        ComponentViewUnit viewUnit = component.generateComponentViewUnit();
-        viewUnit.setStoryIndex(story.size());
-        story.add(viewUnit);
-
-        recyclerAdapter.addElement(viewUnit);
-    }
-
-    private void setupRecyclerView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
-        layoutManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(layoutManager);
-
-        RoadmapListAdapter adapter = new RoadmapListAdapter(recyclerView);
-        recyclerAdapter = adapter;
-        recyclerView.setAdapter(adapter);
-    }
-
-    public boolean fillFullView() {
-        if (active.size() != 0 && ongoingTask != null) {
-            ongoingTask.fillFullView(activity.findViewById(R.id.full_layout));
-            return true;
-        } else return false;
+        taskQueue.add(task);
     }
 
     private void requestNewTask() {
@@ -170,19 +155,44 @@ public class Roadmap {
         taskManageThread.requestTaskSelector();
     }
 
-    public void addTaskToQueue(Task task) {
-        if (task == null) return;
-        if (ongoingTask == null) {
-            moveTaskToNextStep(task);
-            return;
-        }
 
-        taskQueue.add(task);
+    private void addToActive(Task task) {
+        active.add(task);
+        addToStory(task);
     }
+
+    private void addToStory(@NonNull Component component) {
+        ComponentViewUnit viewUnit = component.generateComponentViewUnit();
+        viewUnit.setStoryIndex(story.size());
+        story.add(viewUnit);
+
+        recyclerAdapter.addElement(viewUnit);
+    }
+
+
+    private void setupRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity.getApplicationContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+        RoadmapListAdapter adapter = new RoadmapListAdapter(recyclerView);
+        recyclerAdapter = adapter;
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    public boolean fillFullView() {
+        if (active.size() != 0 && ongoingTask != null) {
+            ongoingTask.fillFullView(activity.findViewById(R.id.full_layout));
+            return true;
+        } else return false;
+    }
+
 
     public void testAction() {
         requestNewTask();
     }
+
 
     private class TaskManageHandler extends Handler {
         @Override

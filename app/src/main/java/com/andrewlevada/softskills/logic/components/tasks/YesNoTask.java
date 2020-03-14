@@ -54,7 +54,8 @@ public class YesNoTask extends AbstractTask {
 
     }
 
-    @Override @NonNull
+    @Override
+    @NonNull
     public Task copy() {
         return new YesNoTask(getActivity(), getDeltaTraitsListCopy(), previewHolders, fullTexts);
     }

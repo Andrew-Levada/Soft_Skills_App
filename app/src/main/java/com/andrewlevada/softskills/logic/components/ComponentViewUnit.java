@@ -17,9 +17,15 @@ public class ComponentViewUnit {
         return component;
     }
 
+
     public void requestUpdate() {
         if (updatable) view = component.getPreview();
     }
+
+    public boolean isUpdatable() {
+        return updatable;
+    }
+
 
     public int getStoryIndex() {
         return storyIndex;
@@ -29,9 +35,6 @@ public class ComponentViewUnit {
         if (storyIndex >= 0) this.storyIndex = storyIndex;
     }
 
-    public boolean isUpdatable() {
-        return updatable;
-    }
 
     public ComponentViewUnit(Component component, boolean updatable) {
         this.component = component;

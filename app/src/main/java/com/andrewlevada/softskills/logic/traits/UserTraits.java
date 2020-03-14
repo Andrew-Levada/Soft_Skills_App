@@ -16,7 +16,6 @@ public class UserTraits {
         if (value != null) return value;
         else return -1;
     }
-
     public int getTrait(String name) {
         if (traitNames.get(name) != null)
             return getTrait(traitNames.get(name));
@@ -28,7 +27,7 @@ public class UserTraits {
     }
 
     public void applyDeltaTraits(DeltaTraits deltaTraits) {
-        for (int key: deltaTraits.getKeySet()) {
+        for (int key : deltaTraits.getKeySet()) {
             if (traits.containsKey(key))
                 traits.put(key,
                         Toolbox.clamp(traits.get(key) + deltaTraits.getValue(key), 1, 100));

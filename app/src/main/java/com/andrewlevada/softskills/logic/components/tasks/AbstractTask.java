@@ -26,6 +26,7 @@ public abstract class AbstractTask extends AbstractComponent implements Task {
     ArrayList<TaskPreviewHolder> previewHolders;
     ArrayList<String> fullTexts;
 
+
     public boolean hasNextStep() {
         return step < stepsCount - 1;
     }
@@ -37,14 +38,12 @@ public abstract class AbstractTask extends AbstractComponent implements Task {
         } else return false;
     }
 
+
     @Override
     public ComponentViewUnit generateComponentViewUnit() {
         return generateComponentViewUnit(previewHolders.get(step).isUpdatable());
     }
 
-    public DeltaTraits getGeneralDeltaTraits() {
-        return generalDeltaTraits;
-    }
 
     @Nullable
     public DeltaTraits getDeltaTraits() {
@@ -58,10 +57,10 @@ public abstract class AbstractTask extends AbstractComponent implements Task {
     private void countGeneralDeltaTraits() {
         HashMap<Integer, Integer> generalMap = new HashMap<>();
 
-        for (DeltaTraits deltaTraits: deltaTraitsList) {
+        for (DeltaTraits deltaTraits : deltaTraitsList) {
             if (deltaTraits == null) continue;
 
-            for (Integer key: deltaTraits.getKeySet()) {
+            for (Integer key : deltaTraits.getKeySet()) {
                 if (generalMap.containsKey(key))
                     generalMap.put(key, generalMap.get(key) + deltaTraits.getValue(key));
                 else generalMap.put(key, deltaTraits.getValue(key));
@@ -71,18 +70,24 @@ public abstract class AbstractTask extends AbstractComponent implements Task {
         generalDeltaTraits = new DeltaTraits(generalMap);
     }
 
+    public DeltaTraits getGeneralDeltaTraits() {
+        return generalDeltaTraits;
+    }
+
+
     View getPreviewBase() {
         View view = LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.task_preview_base, (ViewGroup) getActivity().findViewById(R.id.roadmap_recycler), false);
 
-        ((TextView)view.findViewById(R.id.componentHeader)).setText(previewHolders.get(step).getHeaderText());
-        ((TextView)view.findViewById(R.id.componentText)).setText(previewHolders.get(step).getPreviewText());
+        ((TextView) view.findViewById(R.id.componentHeader)).setText(previewHolders.get(step).getHeaderText());
+        ((TextView) view.findViewById(R.id.componentText)).setText(previewHolders.get(step).getPreviewText());
 
         return view;
     }
 
-    public boolean isMakingNewPreview() {
-        return previewHolders.get(step).isNew();
+    void fillFullViewBase(View parent) {
+        ((TextView) parent.findViewById(R.id.fullHeader)).setText(previewHolders.get(step).getHeaderText());
+        ((TextView) parent.findViewById(R.id.fullText)).setText(fullTexts.get(step));
     }
 
     public void effectExistingCVU() {
@@ -91,14 +96,16 @@ public abstract class AbstractTask extends AbstractComponent implements Task {
         getViewUnit(previewHolders.get(step).getChangeIndex()).requestUpdate();
     }
 
-    void fillFullViewBase(View parent) {
-        ((TextView)parent.findViewById(R.id.fullHeader)).setText(previewHolders.get(step).getHeaderText());
-        ((TextView)parent.findViewById(R.id.fullText)).setText(fullTexts.get(step));
+
+    public boolean isMakingNewPreview() {
+        return previewHolders.get(step).isNew();
     }
+
 
     int getStep() {
         return step;
     }
+
 
     public AbstractTask(RoadmapActivity activity, int stepsCount, ArrayList<DeltaTraits> deltaTraitsList,
                         ArrayList<TaskPreviewHolder> previewHolders, ArrayList<String> fullTexts) {

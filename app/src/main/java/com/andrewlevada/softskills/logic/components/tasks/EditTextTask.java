@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 
 import com.andrewlevada.softskills.R;
 import com.andrewlevada.softskills.RoadmapActivity;
+import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.Toolbox;
 import com.andrewlevada.softskills.logic.Roadmap;
-import com.andrewlevada.softskills.SimpleInflater;
 import com.andrewlevada.softskills.logic.components.MoveToNextStepStatuses;
 import com.andrewlevada.softskills.logic.traits.DeltaTraits;
 import com.google.android.material.textfield.TextInputEditText;
@@ -23,16 +23,14 @@ public class EditTextTask extends AbstractTask {
     private String text;
     private String review;
 
-    @Override @NonNull
+    @Override
+    @NonNull
     public AbstractTask copy() {
         return new EditTextTask(getActivity(), getDeltaTraitsListCopy(), previewHolders, fullTexts);
     }
 
-    private static boolean yes = true;
     @Override
     public boolean isAbleToExecute() {
-        if (!yes) return false;
-        yes = false;
         return true;
     }
 
@@ -47,7 +45,7 @@ public class EditTextTask extends AbstractTask {
 
             case 3:
                 Button button = inflater.inflate(R.layout.task_preview_button)
-                                        .findViewById(R.id.open_button);
+                        .findViewById(R.id.open_button);
 
                 button.setText("Посмотреть");
 
@@ -74,39 +72,39 @@ public class EditTextTask extends AbstractTask {
         switch (getStep()) {
             case 0:
                 final TextInputEditText editTextInput = inflater.inflate(R.layout.task_full_edittext)
-                                                        .findViewById(R.id.edit_text);
+                        .findViewById(R.id.edit_text);
 
                 inflater.inflate(R.layout.task_full_button_contained)
                         .findViewById(R.id.button)
                         .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (editTextInput.getText() == null) return;
+                            @Override
+                            public void onClick(View v) {
+                                if (editTextInput.getText() == null) return;
 
-                        String value = editTextInput.getText().toString().trim();
+                                String value = editTextInput.getText().toString().trim();
 
-                        if (!value.equals("")) {
-                            text = value;
-                            Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_BACKGROUND);
-                        }
-                    }
-                });
+                                if (!value.equals("")) {
+                                    text = value;
+                                    Toolbox.closeFullAndMoveStep(getActivity(), itself, MoveToNextStepStatuses.STATUS_BACKGROUND);
+                                }
+                            }
+                        });
                 break;
 
             case 1:
                 ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
-                            .findViewById(R.id.text)).setText(text);
+                        .findViewById(R.id.text)).setText(text);
                 break;
 
             case 2:
                 ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
-                            .findViewById(R.id.text)).setText(review);
+                        .findViewById(R.id.text)).setText(review);
 
                 ((TextView) inflater.inflate(R.layout.task_full_textview)
-                            .findViewById(R.id.text)).setText("Ваш текст:");
+                        .findViewById(R.id.text)).setText("Ваш текст:");
 
                 ((TextView) inflater.inflate(R.layout.task_full_outlined_text)
-                            .findViewById(R.id.text)).setText(text);
+                        .findViewById(R.id.text)).setText(text);
 
                 inflater.inflate(R.layout.task_full_button_contained)
                         .findViewById(R.id.button)

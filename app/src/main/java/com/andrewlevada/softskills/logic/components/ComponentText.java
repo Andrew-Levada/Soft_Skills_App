@@ -16,12 +16,12 @@ public class ComponentText extends AbstractComponent {
     @Override
     public View getPreview() {
         View view = LayoutInflater.from(getActivity().getApplicationContext())
-                .inflate(R.layout.component_text, (ViewGroup)getActivity().findViewById(R.id.roadmap_recycler), false);
+                .inflate(R.layout.component_text, (ViewGroup) getActivity().findViewById(R.id.roadmap_recycler), false);
 
-        ((TextView)view.findViewById(R.id.componentText)).setText(text);
+        ((TextView) view.findViewById(R.id.componentText)).setText(text);
 
         if (isHeadline) {
-            ((TextView)view.findViewById(R.id.componentText)).setTextColor(Color.BLACK);
+            ((TextView) view.findViewById(R.id.componentText)).setTextColor(Color.BLACK);
         }
 
         return view;

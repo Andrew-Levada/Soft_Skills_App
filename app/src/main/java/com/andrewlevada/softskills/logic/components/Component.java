@@ -10,6 +10,7 @@ public interface Component {
     View getPreview();
 
     RoadmapActivity getActivity();
+
     void setActivity(RoadmapActivity activity);
 
     ComponentViewUnit generateComponentViewUnit();

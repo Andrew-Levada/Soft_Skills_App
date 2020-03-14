@@ -20,10 +20,7 @@ public class DeltaTraits {
     public DeltaTraits(HashMap<Integer, Integer> deltaTraits) {
         this.deltaTraits = deltaTraits;
     }
-
-    public DeltaTraits(ArrayList<Integer> keys, ArrayList<Integer> values) throws Exception {
-        if (keys.size() != values.size()) throw new Exception("keys size must be equal to values size");
-
+    public DeltaTraits(ArrayList<Integer> keys, ArrayList<Integer> values) {
         deltaTraits = new HashMap<>();
         for (int i = 0; i < keys.size(); i++) {
             deltaTraits.put(keys.get(i), values.get(i));
