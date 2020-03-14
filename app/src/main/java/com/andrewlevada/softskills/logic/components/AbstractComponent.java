@@ -30,6 +30,10 @@ public abstract class AbstractComponent implements Component {
         return activity;
     }
 
+    public void setActivity(RoadmapActivity activity) {
+        this.activity = activity;
+    }
+
     protected ComponentViewUnit getViewUnit(int index) {
         return viewUnits.get(index);
     }

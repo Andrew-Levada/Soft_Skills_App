@@ -7,6 +7,8 @@ import com.andrewlevada.softskills.logic.traits.UserTraits;
 import java.util.ArrayList;
 
 public interface ServerInterface {
-    ArrayList<ComparableTask> getFullTaskList(RoadmapActivity activity);
+    void initiateConnection(RoadmapActivity activity);
+
+    ArrayList<ComparableTask> getFullTaskList();
     UserTraits getFullTraitsList();
 }

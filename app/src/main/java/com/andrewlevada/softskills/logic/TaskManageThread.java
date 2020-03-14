@@ -43,6 +43,7 @@ public class TaskManageThread extends Thread {
     @Override
     public synchronized void run() {
         server = new ServerProxy();
+        server.initiateConnection(activity);
 
         syncData();
 
@@ -76,10 +77,6 @@ public class TaskManageThread extends Thread {
 
         userTraits = UserTraits.getInstance();
         taskList = new ArrayList<>();
-    }
-
-    public interface GetTaskCallback {
-        void finished(@Nullable AbstractTask result);
     }
 
     public synchronized void requestTaskSelector() {
@@ -121,24 +118,12 @@ public class TaskManageThread extends Thread {
     }
 
     private void syncData() {
-        taskList = server.getFullTaskList(activity);
+        taskList = server.getFullTaskList();
+
+        for (ComparableTask task: taskList) {
+            task.getWrapped().setActivity(activity);
+        }
+
         userTraits = server.getFullTraitsList();
-    }
-
-    private void updateTaskList() {
-        Resources res = activity.getResources();
-
-        DeltaTraits deltaTraits = new DeltaTraits(new HashMap<Integer, Integer>());
-
-        AbstractTask yesNoTask = YesNoTask.getInstance(activity, deltaTraits, res.getString(R.string.yntask_header),
-                res.getString(R.string.yntask_header),  res.getString(R.string.yntask_header));
-
-        AbstractTask edittextTask = EditTextTask.getInstance(activity, deltaTraits,
-                res.getString(R.string.ettask_header), res.getString(R.string.ettask_short_task),
-                res.getString(R.string.ettask_full_task), res.getString(R.string.ettask_short_review),
-                res.getString(R.string.ettask_full_review));
-
-        taskList.add(new ComparableTask(yesNoTask));
-        taskList.add(new ComparableTask(edittextTask));
     }
 }
